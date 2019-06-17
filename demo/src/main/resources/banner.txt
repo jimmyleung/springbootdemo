@@ -1,0 +1,2 @@
+spring boot demo banner
+${spring-boot.version}

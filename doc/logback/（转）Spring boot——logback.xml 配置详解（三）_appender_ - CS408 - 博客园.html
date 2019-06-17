@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://www.cnblogs.com/lixuwu/p/5811273.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="never">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>（转）Spring boot——logback.xml 配置详解（三）&lt;appender&gt; - CS408 - 博客园</title>
+    <meta property="og:description" content="文章转载自：http://aub.iteye.com/blog/1101260，在此对作者的辛苦表示感谢！ 1 appender &lt;appender&gt;是&lt;configuration&amp;">
+    <link type="text/css" rel="stylesheet" href="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/bundle-SimpleMemory.css">
+<link type="text/css" rel="stylesheet" href="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/226975.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/bundle-SimpleMemory-mobile.css">
+    <link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/lixuwu/rss">
+    <link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/lixuwu/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/lixuwu/wlwmanifest.xml">
+    <script src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/amp4ads-host-v0.js.下载"></script><script src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/pubads_impl_rendering_2019061301.js.下载"></script><script async="" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/analytics.js.下载"></script><script type="text/javascript" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/encoder.js.下载"></script><script src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+    <script>var currentBlogId=226975;var currentBlogApp='lixuwu',cb_enable_mathjax=false;var isLogined=false;</script>
+    <script src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="preload" href="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/f.txt"></script><script src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/pubads_impl_2019061301.js.下载" async=""></script><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-33/html/container.html"></head>
+<body>
+<a name="top"></a>
+
+<!--PageBeginHtml Block Begin-->
+<script src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/bootstrap.min.js.下载"></script>
+<link href="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/marvin.nav.my1607.css" rel="stylesheet">
+<link href="hhttps://files.cnblogs.com/files/lixuwu/bundle-SimpleMemory-A5.css" rel="stylesheet">
+<script type="text/javascript" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/marvin.cnblogs.js.下载"></script>
+<script type="text/javascript" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/marvin.nav.my1607.js.下载"></script>
+
+<!-- 返回顶部小火箭注释 -->
+<style>
+#back-top {
+     position: fixed;
+     bottom: 10px;
+     right: 5px;
+     z-index: 99;
+}
+#back-top span {
+     width: 50px;
+     height: 64px;
+     display: block;
+     background:url(http://images.cnblogs.com/cnblogs_com/seanshao/855033/o_rocket.png) no-repeat center center;
+}
+#back-top a{outline:none}
+</style>
+<script type="text/javascript">
+$(function() {
+	// hide #back-top first
+	$("#back-top").hide();
+	// fade in #back-top
+	$(window).scroll(function() {
+		if ($(this).scrollTop() > 500) {
+			$('#back-top').fadeIn();
+		} else {
+			$('#back-top').fadeOut();
+		}
+	});
+	// scroll body to 0px on click
+	$('#back-top a').click(function() {
+		$('body,html').animate({
+			scrollTop: 0
+		}, 800);
+		return false;
+	});
+});
+</script>
+<p id="back-top" style="display: none;"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#top"><span></span></a></p>
+<!--PageBeginHtml Block End-->
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/lixuwu/"><img id="blogLogo" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/lixuwu/">CS408</a></h1>
+<h2>天下事有难易乎？为之，则难者亦易矣；不为，则易者亦难矣。
+人之为学有难易乎？学之，则难者亦易矣；不学，则易者亦难矣。</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/lixuwu/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li></li>
+<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/lixuwu/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/lixuwu/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 479&nbsp; </span>
+<span id="stats_article_count">文章 - 1&nbsp; </span>
+<span id="stats-comment_count">评论 - 33</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+        <div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/lixuwu/p/5811273.html">（转）Spring boot——logback.xml 配置详解（三）&lt;appender&gt;</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><a name="_labelTop"></a><div id="navCategory"><p style="font-size:18px"><b>阅读目录</b></p><ul><li><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#_label0">1 appender</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#_label1">2 &nbsp;encoder</a></li></ul></div><p><span style="font-family: &#39;Microsoft YaHei&#39;;">文章转载自：<strong><a href="http://aub.iteye.com/blog/1101260" target="_blank">http://aub.iteye.com/blog/1101260</a>，</strong>在此对作者的辛苦表示感谢！</span></p>
+<p>&nbsp;</p>
+<p><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/appenderSyntax.png" alt=""></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#_labelTop">回到顶部</a><a name="_label0"></a></div><h1 id="autoid-0-0-0"><strong>1 appender</strong></h1>
+<p>&lt;appender&gt;是&lt;configuration&gt;的子节点，是负责写日志的组件。</p>
+<p>&lt;appender&gt;有两个必要属性name和class。name指定appender名称，class指定appender的全限定名。</p>
+<h2 id="autoid-1-0-0"><strong>1.1 ConsoleAppender</strong></h2>
+<p>把日志添加到控制台，有以下子节点：</p>
+<p>&lt;encoder&gt;：对日志进行格式化。（具体参数稍后讲解&nbsp;）</p>
+<p>&lt;target&gt;：字符串&nbsp;<em>System.out&nbsp;</em>或者&nbsp;<em>System.err</em>&nbsp;，默认&nbsp;<em>System.out</em>&nbsp;；</p>
+<p>例如：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span>
+
+  <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="STDOUT"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.ConsoleAppender"</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg %n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+  <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>
+
+  <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">root </span><span style="color: #ff0000;">level</span><span style="color: #0000ff;">="DEBUG"</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="STDOUT"</span> <span style="color: #0000ff;">/&gt;</span>
+  <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">root</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h2 id="autoid-1-1-0"><strong>1.2 FileAppender</strong></h2>
+<p>把日志添加到文件，有以下子节点：</p>
+<p>&lt;file&gt;：被写入的文件名，可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建，没有默认值。</p>
+<p>&lt;append&gt;：如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true。</p>
+<p>&lt;encoder&gt;：对记录事件进行格式化。（具体参数稍后讲解&nbsp;）</p>
+<p>&lt;prudent&gt;：如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false。</p>
+<p>例如：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span>
+
+  <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="FILE"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.FileAppender"</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span>testFile.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">append</span><span style="color: #0000ff;">&gt;</span>true<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">append</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+  <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>
+        
+  <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">root </span><span style="color: #ff0000;">level</span><span style="color: #0000ff;">="DEBUG"</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="FILE"</span> <span style="color: #0000ff;">/&gt;</span>
+  <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">root</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h2 id="autoid-1-2-0"><strong>1.3 RollingFileAppender</strong></h2>
+<p>滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件。有以下子节点：</p>
+<p>&lt;file&gt;：被写入的文件名，可以是相对目录，也可以是绝对目录，<span style="color: #ff0000;">如果上级目录不存在会自动创建</span>，没有默认值。</p>
+<p>&lt;append&gt;：如果是 true，日志被追加到文件结尾，如果是 false，清空现存文件，默认是true。</p>
+<p>&lt;encoder&gt;：对记录事件进行格式化。（具体参数稍后讲解&nbsp;）</p>
+<p><span class="option">&lt;rollingPolicy&gt;:当发生滚动时，决定&nbsp;<strong>RollingFileAppender</strong>&nbsp;的行为，涉及文件移动和重命名。</span></p>
+<p>&lt;<span class="option">triggeringPolicy&nbsp;<strong><span class="option">&gt;:&nbsp;</span></strong><span class="option">告知&nbsp;<strong>RollingFileAppender</strong>&nbsp;何时<span class="option">激活滚动。</span></span></span></p>
+<p>&lt;prudent&gt;：当为true时，不支持FixedWindowRollingPolicy。支持TimeBasedRollingPolicy，但是有两个限制，1不支持也不允许文件压缩，2不能设置file属性，必须留空。</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18pt;"><strong>rollingPolicy：</strong></span></p>
+<ul>
+<li><strong>TimeBasedRollingPolicy：</strong>&nbsp;最常用的滚动策略，它根据时间来制定滚动策略，既负责滚动也负责出发滚动。有以下子节点：</li>
+</ul>
+<p>&lt;<span class="option">fileNamePattern&gt;:</span></p>
+<p><span class="option">必要节点，包含文件名及“%d”转换符，&nbsp;<span class="option">“%d”可以包含一个<code>java.text.SimpleDateFormat指定的时间格式，如：%d{yyyy-MM}。如果直接使用 %d，默认格式是 yyyy-MM-dd。</code><strong>RollingFileAppender</strong>&nbsp;的file字节点可有可无，通过设置file，可以为活动文件和归档文件指定不同位置，当前日志总是记录到file指定的文件（活动文件），活动文件的名字不会改变；如果没设置file，活动文件的名字会根据<strong><span class="option">fileNamePattern&nbsp;</span></strong><span class="option">的值，每隔一段时间改变一次。“/”或者“\”会被当做目录分隔符。</span></span></span>&nbsp;</p>
+<p>&lt;<span class="option">maxHistory&gt;:</span></p>
+<p><span class="option">可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件。假设设置每个月滚动，且&lt;<span class="option">maxHistory&gt;是6，则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除。</span></span></p>
+<p>&nbsp;</p>
+<ul>
+<li><strong>FixedWindowRollingPolicy：</strong>&nbsp;根据固定窗口算法重命名文件的滚动策略。有以下子节点：</li>
+</ul>
+<p>&lt;<span class="option">minIndex&gt;:窗口索引最小值</span></p>
+<p>&lt;<span class="option">maxIndex&gt;:窗口索引最大值，当用户指定的窗口过大时，会自动将窗口设置为12。</span></p>
+<p>&lt;<span class="option">fileNamePattern&nbsp;&gt;:</span></p>
+<p>必须包含“%i”例如，假设最小值和最大值分别为1和2，命名模式为 mylog%i.log,会产生归档文件mylog1.log和mylog2.log。还可以指定文件压缩选项，例如，mylog%i.log.gz 或者 没有log%i.log.zip</p>
+<p>&nbsp;</p>
+<p><span style="font-size: 18pt;"><strong>triggeringPolicy:</strong></span></p>
+<ul>
+<li><strong>SizeBasedTriggeringPolicy：</strong>&nbsp;查看当前活动文件的大小，如果超过指定大小会告知<strong>RollingFileAppender&nbsp;</strong>触发当前活动文件滚动。只有一个节点<strong>:</strong></li>
+</ul>
+<p>&lt;maxFileSize&gt;:这是活动文件的大小，默认值是10MB。</p>
+<p>例如：每天生成一个日志文件，保存30天的日志文件。</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span> 
+  <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="FILE"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.RollingFileAppender"</span><span style="color: #0000ff;">&gt;</span> 
+    
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">rollingPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span style="color: #0000ff;">&gt;</span> 
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span>logFile.%d{yyyy-MM-dd}.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span> 
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">maxHistory</span><span style="color: #0000ff;">&gt;</span>30<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">maxHistory</span><span style="color: #0000ff;">&gt;</span>  
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">rollingPolicy</span><span style="color: #0000ff;">&gt;</span> 
+ 
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span> 
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span> 
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span> 
+  <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>  
+ 
+  <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">root </span><span style="color: #ff0000;">level</span><span style="color: #0000ff;">="DEBUG"</span><span style="color: #0000ff;">&gt;</span> 
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="FILE"</span> <span style="color: #0000ff;">/&gt;</span> 
+  <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">root</span><span style="color: #0000ff;">&gt;</span> 
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span>&nbsp;</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp; 例如：按照固定窗口模式生成日志文件，当文件大于20MB时，生成新的日志文件。窗口大小是1到3，当保存了3个归档文件后，将覆盖最早的日志。<span style="color: #ff0000;">（没有尝试）</span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span> 
+  <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="FILE"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.RollingFileAppender"</span><span style="color: #0000ff;">&gt;</span> 
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span>test.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span> 
+ 
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">rollingPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.FixedWindowRollingPolicy"</span><span style="color: #0000ff;">&gt;</span> 
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span>tests.%i.log.zip<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span> 
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">minIndex</span><span style="color: #0000ff;">&gt;</span>1<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">minIndex</span><span style="color: #0000ff;">&gt;</span> 
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">maxIndex</span><span style="color: #0000ff;">&gt;</span>3<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">maxIndex</span><span style="color: #0000ff;">&gt;</span> 
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">rollingPolicy</span><span style="color: #0000ff;">&gt;</span> 
+ 
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">triggeringPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"</span><span style="color: #0000ff;">&gt;</span> 
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">maxFileSize</span><span style="color: #0000ff;">&gt;</span>5MB<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">maxFileSize</span><span style="color: #0000ff;">&gt;</span> 
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">triggeringPolicy</span><span style="color: #0000ff;">&gt;</span> 
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span> 
+      <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span> 
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span> 
+  <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span> 
+         
+  <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">root </span><span style="color: #ff0000;">level</span><span style="color: #0000ff;">="DEBUG"</span><span style="color: #0000ff;">&gt;</span> 
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="FILE"</span> <span style="color: #0000ff;">/&gt;</span> 
+  <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">root</span><span style="color: #0000ff;">&gt;</span> 
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h2 id="autoid-1-3-0">1.4 补充</h2>
+<p>另外还有SocketAppender、SMTPAppender、DBAppender、SyslogAppender、SiftingAppender，并不常用，这些就不在这里讲解了，大家可以参考官方文档。当然大家可以编写自己的Appender。</p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#_labelTop">回到顶部</a><a name="_label1"></a></div><h1 id="autoid-1-4-0">2 &nbsp;encoder</h1>
+<p>负责两件事，一是把日志信息转换成字节数组，二是把字节数组写入到输出流。</p>
+<p>目前<strong>PatternLayoutEncoder</strong>&nbsp;是唯一有用的且默认的<strong>encoder</strong>&nbsp;，有一个&lt;pattern&gt;节点，用来设置日志的输入格式。使用“%”加“转换符”方式，如果要输出“%”，则必须用“\”对“\%”进行转义。</p>
+<p>例如：</p>
+<div class="cnblogs_code">
+<pre><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span> 
+   <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span> 
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span></pre>
+</div>
+<h2 id="autoid-2-0-0"><strong>2.1 &lt;pattern&gt;里面的转换符说明</strong></h2>
+<p><span style="color: #ff0000;">可以直接仿照下面的样例修改日志的输出格式。</span></p>
+<p>　　　　　　<span style="font-size: 14pt; color: #ff0000;">转换符</span> 　　　　　　　　　　　　　　　　　　　　　　　　　　　　<span style="font-size: 14pt; color: #ff0000;">作用</span></p>
+<table class="bodyTable properties" border="1">
+<tbody>
+<tr>
+<td><strong>c</strong>&nbsp;{<em>length</em>&nbsp;}&nbsp;<br><strong>lo</strong>&nbsp;{<em>length</em>&nbsp;}&nbsp;<br><strong>logger</strong>&nbsp;{<em>length</em>&nbsp;}</td>
+<td>输出日志的logger名，可有一个整形参数，功能是缩短logger名，设置为0表示只输入logger最右边点符号之后的字符串。 Conversion specifier Logger name Result
+<table class="bodyTable dark" border="1" cellpadding="8">
+<tbody>
+<tr>
+<td>%logger</td>
+<td>mainPackage.sub.sample.Bar</td>
+<td>mainPackage.sub.sample.Bar</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%logger{0}</td>
+<td>mainPackage.sub.sample.Bar</td>
+<td>Bar</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%logger{5}</td>
+<td>mainPackage.sub.sample.Bar</td>
+<td>m.s.s.Bar</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%logger{10}</td>
+<td>mainPackage.sub.sample.Bar</td>
+<td>m.s.s.Bar</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%logger{15}</td>
+<td>mainPackage.sub.sample.Bar</td>
+<td>m.s.sample.Bar</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%logger{16}</td>
+<td>mainPackage.sub.sample.Bar</td>
+<td>m.sub.sample.Bar</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%logger{26}</td>
+<td>mainPackage.sub.sample.Bar</td>
+<td>mainPackage.sub.sample.Bar</td>
+
+
+
+
+
+
+
+
+
+</tr>
+
+
+
+
+
+
+
+
+
+</tbody>
+
+
+
+
+
+
+
+
+
+</table>
+<p>&nbsp;</p>
+
+
+
+
+
+
+
+
+
+</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr class="alt">
+<td><strong>C</strong>&nbsp;{<em>length</em>&nbsp;}&nbsp;<br><strong>class</strong>&nbsp;{<em>length</em>&nbsp;}</td>
+<td>输出执行记录请求的调用者的全限定名。参数与上面的一样。尽量避免使用，除非执行速度不造成任何问题。</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td><strong>contextName</strong>&nbsp;<br><strong>cn</strong></td>
+<td>输出上下文名称。</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr class="alt">
+<td><strong>d</strong>&nbsp;{<em>pattern</em>&nbsp;}&nbsp;<br><strong>date</strong>&nbsp;{<em>pattern</em>&nbsp;}</td>
+<td>输出日志的打印日志，模式语法与<code>java.text.SimpleDateFormat</code>&nbsp;兼容。 Conversion Pattern Result
+<table class="bodyTable dark" border="1" cellpadding="8">
+<tbody>
+<tr>
+<td>%d</td>
+<td>2006-10-20 14:06:49,812</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%date</td>
+<td>2006-10-20 14:06:49,812</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%date{ISO8601}</td>
+<td>2006-10-20 14:06:49,812</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%date{HH:mm:ss.SSS}</td>
+<td>14:06:49.812</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td>%date{dd&nbsp;MMM&nbsp;yyyy&nbsp;;HH:mm:ss.SSS}</td>
+<td>20 oct. 2006;14:06:49.812</td>
+
+
+
+
+
+
+
+
+
+</tr>
+
+
+
+
+
+
+
+
+
+</tbody>
+
+
+
+
+
+
+
+
+
+</table>
+
+
+
+
+
+
+
+
+
+</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr>
+<td><strong>F / file</strong></td>
+<td>输出执行记录请求的java源文件名。尽量避免使用，除非执行速度不造成任何问题。</td>
+
+
+
+
+
+
+
+
+
+</tr>
+<tr class="alt">
+<td><strong>caller{depth}</strong><strong>caller{depth, evaluator-1, ... evaluator-n}</strong></td>
+<td>输出生成日志的调用者的位置信息，整数选项表示输出信息深度。
+<p>例如，&nbsp;<strong>%caller{2}</strong>&nbsp;&nbsp; 输出为：</p>
+<pre class="source white_bg">0    [main] DEBUG - logging statement 
+Caller+0   at mainPackage.sub.sample.Bar.sampleMethodName(Bar.java:22)
+Caller+1   at mainPackage.sub.sample.Bar.createLoggingRequest(Bar.java:17)</pre>
+<p>例如，&nbsp;<strong>%caller{3}</strong>&nbsp;&nbsp; 输出为：</p>
+<pre class="source white_bg">16   [main] DEBUG - logging statement 
+Caller+0   at mainPackage.sub.sample.Bar.sampleMethodName(Bar.java:22)
+Caller+1   at mainPackage.sub.sample.Bar.createLoggingRequest(Bar.java:17)
+Caller+2   at mainPackage.ConfigTester.main(ConfigTester.java:38)</pre>
+</td>
+</tr>
+<tr>
+<td><strong>L / line</strong></td>
+<td>输出执行日志请求的行号。尽量避免使用，除非执行速度不造成任何问题。</td>
+</tr>
+<tr class="alt">
+<td><strong>m / msg / message</strong></td>
+<td>
+<p>输出应用程序提供的信息。</p>
+</td>
+</tr>
+<tr>
+<td><strong>M / method</strong></td>
+<td>输出执行日志请求的方法名。尽量避免使用，除非执行速度不造成任何问题。</td>
+</tr>
+<tr class="alt">
+<td><strong>n</strong></td>
+<td>输出平台先关的分行符“\n”或者“\r\n”。</td>
+</tr>
+<tr>
+<td><strong>p / le / level</strong></td>
+<td>输出日志级别。</td>
+</tr>
+<tr class="alt">
+<td><strong>r / relative</strong></td>
+<td>输出从程序启动到创建日志记录的时间，单位是毫秒</td>
+</tr>
+<tr>
+<td><strong>t / thread</strong></td>
+<td>输出产生日志的线程名。</td>
+</tr>
+<tr class="alt">
+<td><strong>replace(<em>p</em>&nbsp;){r, t}</strong></td>
+<td>
+<p><strong>p</strong>&nbsp;为日志内容，<strong>r</strong>&nbsp;是正则表达式，将<strong>p</strong>&nbsp;中符合<strong>r</strong>&nbsp;的内容替换为<strong>t</strong>&nbsp;。</p>
+<p>例如， "%replace(%msg){'\s', ''}"</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="autoid-2-1-0">&nbsp;2.2 格式修饰符和转换符结合</h2>
+<p><strong>格式修饰符，与转换符共同使用：</strong></p>
+<p>可选的格式修饰符位于“%”和转换符之间。</p>
+<p>第一个可选修饰符是<strong>左对齐</strong>&nbsp;标志，符号是减号“-”；</p>
+<p>接着是可选的<strong>最小宽度</strong>&nbsp;修饰符，用十进制数表示。如果字符小于最小宽度，则左填充或右填充，默认是左填充（即右对齐），填充符为空格。如果字符大于最小宽度，字符永远不会被截断。</p>
+<p><strong>最大宽度</strong>&nbsp;修饰符，符号是点号"."后面加十进制数。如果字符大于最大宽度，则从前面截断。点符号“.”后面加减号“-”在加数字，表示从尾部截断。</p>
+<p>例如：%-4relative 表示，将输出从程序启动到创建日志记录的时间 进行左对齐 且最小宽度为4。</p><br><hr><pre>如果您觉得阅读本文对您有帮助，请点一下“<b>推荐</b>”按钮，让更多的人能够享受到获取知识的快乐！因为本人初入职场，鉴于自身阅历有限，<b>所以本博客内容大部分来源于网络中已有知识的汇总</b>，欢迎各位转载，评论，大家一起学习进步！如有侵权，请及时和我联系，切实维护您的权益！</pre></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(5811273,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;b1051354-e5f5-e411-b908-9dcfd8948a71&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/lixuwu/" target="_blank"><img src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/20160717235103.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/lixuwu/">CS408</a><br>
+            <a href="https://home.cnblogs.com/u/lixuwu/followees">关注 - 3</a><br>
+            <a href="https://home.cnblogs.com/u/lixuwu/followers">粉丝 - 72</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;b1051354-e5f5-e411-b908-9dcfd8948a71&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(5811273,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(5811273,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/lixuwu/p/5810912.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/lixuwu/p/5810912.html" title="发布于2016-08-26 16:36">（转）Spring boot——logback.xml 配置详解（二）</a><br><a href="https://www.cnblogs.com/lixuwu/p/5816814.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/lixuwu/p/5816814.html" title="发布于2016-08-29 09:51">（转）Spring boot——logback.xml 配置详解（四）&lt;filter&gt;</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2016-08-26 17:39</span> <a href="https://www.cnblogs.com/lixuwu/">CS408</a> 阅读(<span id="post_view_count">1526</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=5811273" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/lixuwu/p/5811273.html#" onclick="AddToWz(5811273);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=226975,cb_entryId=5811273,cb_blogApp=currentBlogApp,cb_blogUserGuid='b1051354-e5f5-e411-b908-9dcfd8948a71',cb_entryCreatedDate='2016/8/26 17:39:00';loadViewCount(cb_entryId);var cb_postType=1;var isMarkdown=false;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万C++/C#源码: 大型实时仿真组态图形源码</a><br><a href="https://www.grapecity.com.cn/developer/spreadjs?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS&amp;utm_campaign=community" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-SpreadJS&#39;)">【前端】SpreadJS表格控件，可嵌入系统开发的在线Excel</a><br><a href="https://ke.qq.com/adActivity.html?name=xiangxueketang2" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-享学&#39;)">【培训】阿里P8面试官：什么样的人能进阿里</a><br><a href="https://q.cnblogs.com/" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-博问&#39;)">【推荐】程序员问答平台，解决您开发中遇到的技术难题</a><br></div>
+<div id="opt_under_post"></div>
+<script async="async" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/gpt.js.下载"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+  googletag.cmd.push(function() {
+        googletag.defineSlot('/1090369/C1', [300, 250], 'div-gpt-ad-1546353474406-0').addService(googletag.pubads());
+        googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c1" class="c_ad_block">
+    <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="COSwmZ_i8OICFZeJlgodn14BoA"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_news"><div class="recomm-block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/wlsblog/p/7909945.html" target="_blank" onclick="clickRecomItmem(7909945)">Spring boot——logback.xml 配置详解（三）&lt;appender&gt;</a><br>·  <a href="https://www.cnblogs.com/cb0327/p/5770794.html" target="_blank" onclick="clickRecomItmem(5770794)">logback 配置详解（二）——appender</a><br>·  <a href="https://www.cnblogs.com/yangyongjie/p/7527423.html" target="_blank" onclick="clickRecomItmem(7527423)">logback logback.xml常用配置详解（二）&lt;appender&gt;</a><br>·  <a href="https://www.cnblogs.com/lcngu/p/6067817.html" target="_blank" onclick="clickRecomItmem(6067817)">logback 常用配置详解&lt;appender&gt;</a><br>·  <a href="https://www.cnblogs.com/yin-jingyu/archive/2011/09/02/2163448.html" target="_blank" onclick="clickRecomItmem(2163448)">logback 常用配置详解（二） &lt;appender&gt;</a><br></div></div>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CLzCmp_i8OICFZeJlgodn14BoA"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/626980/" target="_blank">激光摧毁血液中的癌细胞</a><br> ·  <a href="https://news.cnblogs.com/n/626979/" target="_blank">地球历史的24个转折点</a><br> ·  <a href="https://news.cnblogs.com/n/626978/" target="_blank">2249万元！UCloud 中标中移信息技术“异地多活”云平台试点工程</a><br> ·  <a href="https://news.cnblogs.com/n/626977/" target="_blank">4G的小程序与5G的Chromium OS？</a><br> ·  <a href="https://news.cnblogs.com/n/626976/" target="_blank">美国航空机上 WiFi 全面升级为卫星网络，空中上网的体验更好了</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+ if(enablePostBottom()) {
+    codeHighlight();
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverT2();
+    deliverC1();
+    deliverC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);  
+}
+</script>
+</div>
+
+    
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div align="center">访问统计：</div>
+<div align="center"><a href="http://www.amazingcounters.com/"><img border="0" src="./（转）Spring boot——logback.xml 配置详解（三）_appender_ - CS408 - 博客园_files/counter.php" alt="AmazingCounters.com"></a></div><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/lixuwu/">CS408</a><br>园龄：<a href="https://home.cnblogs.com/u/lixuwu/" title="入园时间：2015-05-09">4年1个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/lixuwu/followers/">72</a><br>关注：<a href="https://home.cnblogs.com/u/lixuwu/followees/">3</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;b1051354-e5f5-e411-b908-9dcfd8948a71&#39;)">+加关注</a></div><script>getFollowStatus('b1051354-e5f5-e411-b908-9dcfd8948a71')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/05/01&#39;);return false;">&lt;</a></td><td align="center">2019年6月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/07/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">26</td><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td class="CalWeekendDay" align="center">1</td></tr><tr><td class="CalWeekendDay" align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center"><a href="https://www.cnblogs.com/lixuwu/archive/2019/06/05.html"><u>5</u></a></td><td align="center"><a href="https://www.cnblogs.com/lixuwu/archive/2019/06/06.html"><u>6</u></a></td><td align="center">7</td><td class="CalWeekendDay" align="center">8</td></tr><tr><td class="CalWeekendDay" align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td class="CalWeekendDay" align="center">15</td></tr><tr><td class="CalWeekendDay" align="center">16</td><td class="CalTodayDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td class="CalWeekendDay" align="center">22</td></tr><tr><td class="CalWeekendDay" align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td class="CalWeekendDay" align="center">29</td></tr><tr><td class="CalWeekendDay" align="center">30</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/lixuwu/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/lixuwu/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/lixuwu/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/lixuwu/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/lixuwu/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/lixuwu/tag/Maven%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Maven学习总结</a>(16)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/java%E5%9F%BA%E7%A1%80/">java基础</a>(15)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/eclipse/">eclipse</a>(8)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/%E5%B7%A5%E5%85%B7/">工具</a>(8)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AF%95/">面试笔试</a>(7)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/%E7%90%86%E8%A7%A3JVM/">理解JVM</a>(4)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/%E7%AE%80%E5%8E%86/">简历</a>(3)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/spring/">spring</a>(3)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/git/">git</a>(3)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/">java多线程</a>(2)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类<span style="font-size:11px;font-weight:normal">(499)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/lixuwu/category/1264398.html">C++(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/lixuwu/category/854080.html">Computer(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/lixuwu/category/853853.html">Css(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/lixuwu/category/856384.html">Development tools(84)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/lixuwu/category/853850.html">Java(75)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/lixuwu/category/853858.html">Java多线程(22)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/lixuwu/category/853851.html">Jquery(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/lixuwu/category/853847.html">Json(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/lixuwu/category/862507.html">Linux(38)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/lixuwu/category/892095.html">Linux日练(14)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/lixuwu/category/1041142.html">log4j(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/lixuwu/category/909685.html">Mq(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/lixuwu/category/853839.html">MyBatis(16)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/lixuwu/category/853855.html">Redis-Memcached(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/lixuwu/category/1179712.html">RPC(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="https://www.cnblogs.com/lixuwu/category/853849.html">Spring(31)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="https://www.cnblogs.com/lixuwu/category/1174187.html">tomcat(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="https://www.cnblogs.com/lixuwu/category/878781.html">Xml(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="https://www.cnblogs.com/lixuwu/category/853852.html">成长阅历(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="https://www.cnblogs.com/lixuwu/category/894046.html">单元测试(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="https://www.cnblogs.com/lixuwu/category/1429504.html">分布式(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_21" href="https://www.cnblogs.com/lixuwu/category/853862.html">工作总结(27)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_22" href="https://www.cnblogs.com/lixuwu/category/853856.html">面试算法(28)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_23" href="https://www.cnblogs.com/lixuwu/category/853859.html">面试题(49)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_24" href="https://www.cnblogs.com/lixuwu/category/907361.html">设计模式(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_25" href="https://www.cnblogs.com/lixuwu/category/853857.html">数据库(31)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_26" href="https://www.cnblogs.com/lixuwu/category/853864.html">网络知识(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_27" href="https://www.cnblogs.com/lixuwu/category/853861.html">左程云老师算法解析(1)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案<span style="font-size:11px;font-weight:normal">(479)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/lixuwu/archive/2019/06.html">2019年6月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/lixuwu/archive/2019/05.html">2019年5月 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/lixuwu/archive/2019/04.html">2019年4月 (39)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/lixuwu/archive/2019/03.html">2019年3月 (17)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/lixuwu/archive/2019/01.html">2019年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/lixuwu/archive/2018/12.html">2018年12月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/lixuwu/archive/2018/11.html">2018年11月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/lixuwu/archive/2018/10.html">2018年10月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/lixuwu/archive/2018/09.html">2018年9月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/lixuwu/archive/2018/08.html">2018年8月 (14)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/lixuwu/archive/2018/07.html">2018年7月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/lixuwu/archive/2018/04.html">2018年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/lixuwu/archive/2018/03.html">2018年3月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/lixuwu/archive/2018/02.html">2018年2月 (9)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="https://www.cnblogs.com/lixuwu/archive/2018/01.html">2018年1月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="https://www.cnblogs.com/lixuwu/archive/2017/12.html">2017年12月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="https://www.cnblogs.com/lixuwu/archive/2017/11.html">2017年11月 (17)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="https://www.cnblogs.com/lixuwu/archive/2017/10.html">2017年10月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="https://www.cnblogs.com/lixuwu/archive/2017/09.html">2017年9月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_19" href="https://www.cnblogs.com/lixuwu/archive/2017/08.html">2017年8月 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_20" href="https://www.cnblogs.com/lixuwu/archive/2017/07.html">2017年7月 (18)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_21" href="https://www.cnblogs.com/lixuwu/archive/2017/06.html">2017年6月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_22" href="https://www.cnblogs.com/lixuwu/archive/2017/05.html">2017年5月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_23" href="https://www.cnblogs.com/lixuwu/archive/2017/04.html">2017年4月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_24" href="https://www.cnblogs.com/lixuwu/archive/2017/03.html">2017年3月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_25" href="https://www.cnblogs.com/lixuwu/archive/2017/02.html">2017年2月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_26" href="https://www.cnblogs.com/lixuwu/archive/2017/01.html">2017年1月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_27" href="https://www.cnblogs.com/lixuwu/archive/2016/12.html">2016年12月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_28" href="https://www.cnblogs.com/lixuwu/archive/2016/11.html">2016年11月 (31)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_29" href="https://www.cnblogs.com/lixuwu/archive/2016/10.html">2016年10月 (15)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_30" href="https://www.cnblogs.com/lixuwu/archive/2016/09.html">2016年9月 (15)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_31" href="https://www.cnblogs.com/lixuwu/archive/2016/08.html">2016年8月 (20)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_32" href="https://www.cnblogs.com/lixuwu/archive/2016/07.html">2016年7月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_33" href="https://www.cnblogs.com/lixuwu/archive/2016/06.html">2016年6月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_34" href="https://www.cnblogs.com/lixuwu/archive/2016/05.html">2016年5月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_35" href="https://www.cnblogs.com/lixuwu/archive/2016/03.html">2016年3月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_36" href="https://www.cnblogs.com/lixuwu/archive/2016/02.html">2016年2月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_37" href="https://www.cnblogs.com/lixuwu/archive/2016/01.html">2016年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_38" href="https://www.cnblogs.com/lixuwu/archive/2015/11.html">2015年11月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_39" href="https://www.cnblogs.com/lixuwu/archive/2015/10.html">2015年10月 (38)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_40" href="https://www.cnblogs.com/lixuwu/archive/2015/09.html">2015年9月 (32)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_41" href="https://www.cnblogs.com/lixuwu/archive/2015/08.html">2015年8月 (26)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_42" href="https://www.cnblogs.com/lixuwu/archive/2015/07.html">2015年7月 (13)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_43" href="https://www.cnblogs.com/lixuwu/archive/2015/05.html">2015年5月 (10)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_articlecategory" class="catListArticleCategory sidebar-block">
+<h3 class="catListTitle">文章分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_2_Link_0" href="https://www.cnblogs.com/lixuwu/category/1031100.html">Work-center</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#4256934">1. Re:Spring boot——logback 基础使用篇（一）</a></li>
+        <li class="recent_comment_body">1.这里若不配置具体的包的日志级别，日志文件信息将为空<br><br>这个应该错了，不配置具体包的日志级别日志文件也不会为空。</li>
+        <li class="recent_comment_author">--唐永双</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/5944062.html#4255162">2. Re:（转）Linux下查看文件和文件夹大小 删除日志</a></li>
+        <li class="recent_comment_body">已收藏</li>
+        <li class="recent_comment_author">--4_4</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/6697537.html#4218238">3. Re:(转)@ContextConfiguration注解说明</a></li>
+        <li class="recent_comment_body">学习到了！</li>
+        <li class="recent_comment_author">--一杯热咖啡AAA</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/6692371.html#4190247">4. Re:（转）eclipse导入Gradle项目</a></li>
+        <li class="recent_comment_body">-----------------</li>
+        <li class="recent_comment_author">--规格严格-功夫到家</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/7069826.html#4179070">5. Re:（转）java之runnable jar与普通jar</a></li>
+        <li class="recent_comment_body">6666</li>
+        <li class="recent_comment_author">--规格严格-功夫到家</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/lixuwu/p/5944062.html">1. （转）Linux下查看文件和文件夹大小 删除日志(269242)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html">2. Spring boot——logback 基础使用篇（一）(115559)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5855031.html">3. （转）如何在maven的pom.xml中添加本地jar包(51246)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5916585.html">4. （转）mybatis常用jdbcType数据类型(39664)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/6102444.html">5. （转）centos7安装telnet服务(38300)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html">1. Spring boot——logback 基础使用篇（一）(15)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/6116513.html">2. Linux日志分析ELK环境搭建(2)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5944062.html">3. （转）Linux下查看文件和文件夹大小 删除日志(2)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5855031.html">4. （转）如何在maven的pom.xml中添加本地jar包(2)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/8469037.html">5. 如何写一份优秀的java程序员简历(2)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html">1. Spring boot——logback 基础使用篇（一）(31)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/7979480.html">2. 多线程 ForkJoinPool(7)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/8469037.html">3. 如何写一份优秀的java程序员简历(5)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/6692371.html">4. （转）eclipse导入Gradle项目(5)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/6797077.html">5. (转) Eclipse Maven 编译错误 Dynamic Web Module 3.1 requires Java 1.7 or newer 解决方案(3)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2019 CS408
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+<!--PageEndHtml Block Begin-->
+<script language="javascript" type="text/javascript">
+//生成目录索引列表
+function GenerateContentList()
+{
+    var jquery_h3_list = $('#cnblogs_post_body h1');//如果你的章节标题不是h3,只需要将这里的h3换掉即可
+    if(jquery_h3_list.length>0)
+    {
+        var content = '<a name="_labelTop"></a>';
+        content    += '<div id="navCategory">';
+        content    += '<p style="font-size:18px"><b>阅读目录</b></p>';
+        content    += '<ul>';
+        for(var i =0;i<jquery_h3_list.length;i++)
+        {
+            var go_to_top = '<div style="text-align: right"><a href="#_labelTop">回到顶部</a><a name="_label' + i + '"></a></div>';
+            $(jquery_h3_list[i]).before(go_to_top);
+            var li_content = '<li><a href="#_label' + i + '">' + $(jquery_h3_list[i]).text() + '</a></li>';
+            content += li_content;
+        }
+        content    += '</ul>';
+        content    += '</div>';
+        if($('#cnblogs_post_body').length != 0 )
+        {
+            $($('#cnblogs_post_body')[0]).prepend(content);
+        }
+    }    
+}
+GenerateContentList();
+</script>
+<!--PageEndHtml Block End-->
+
+
+<div id="toTop" style="zoom:0;"></div><div id="sideToolbar" style="display: none;"><div class="sideCatalogBg" id="sideCatalog"><div id="sideCatalog-sidebar"><div class="sideCatalog-sidebar-top"></div><div class="sideCatalog-sidebar-bottom"></div></div><div id="sideCatalog-catalog"><ul class="nav" style="width:300px;zoom:1"><li class="active"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#autoid-0-0-0" title="1 appender">1 appender</a><span class="sideCatalog-dot"></span></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#autoid-1-0-0" title="1.1 ConsoleAppender">1.1 ConsoleAppender</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#autoid-1-1-0" title="1.2 FileAppender">1.2 FileAppender</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#autoid-1-2-0" title="1.3 RollingFileAppender">1.3 RollingFileAppender</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#autoid-1-3-0" title="1.4 补充">1.4 补充</a></li><li class=""><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#autoid-1-4-0" title="2  encoder">2 &nbsp;encoder</a><span class="sideCatalog-dot"></span></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#autoid-2-0-0" title="2.1 &lt;pattern&gt;里面的转换符说明">2.1 <pattern>里面的转换符说明</pattern></a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5811273.html#autoid-2-1-0" title=" 2.2 格式修饰符和转换符结合">&nbsp;2.2 格式修饰符和转换符结合</a></li></ul></div></div><a href="javascript:void(0);" id="sideCatalogBtn" class="sideCatalogBtnDisable"></a></div></body></html>

@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://www.cnblogs.com/lixuwu/p/5804793.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="origin">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>Spring boot——logback 基础使用篇（一） - CS408 - 博客园</title>
+    <meta property="og:description" content="1 简单日志配置 spring boot内部使用Commons Logging来记录日志，但也保留外部接口可以让一些日志框架来进行实现，例如Java Util Logging,Log4J2还有Logb">
+    <link type="text/css" rel="stylesheet" href="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/bundle-SimpleMemory.css">
+<link type="text/css" rel="stylesheet" href="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/226975.css">
+<link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/bundle-SimpleMemory-mobile.css">
+    <link title="RSS" type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/lixuwu/rss">
+    <link title="RSD" type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/lixuwu/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/lixuwu/wlwmanifest.xml">
+    <script src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/amp4ads-host-v0.js.下载"></script><script src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/pubads_impl_rendering_2019061301.js.下载"></script><script async="" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/analytics.js.下载"></script><script type="text/javascript" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/encoder.js.下载"></script><script src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/jquery-2.2.0.min.js.下载"></script>
+    <script>var currentBlogId=226975;var currentBlogApp='lixuwu',cb_enable_mathjax=false;var isLogined=false;</script>
+    <script src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+<link rel="preload" href="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/f.txt" as="script"><script type="text/javascript" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/f.txt"></script><script src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/pubads_impl_2019061301.js.下载" async=""></script><link rel="prefetch" href="https://tpc.googlesyndication.com/safeframe/1-0-33/html/container.html"></head>
+<body>
+<a name="top"></a>
+
+<!--PageBeginHtml Block Begin-->
+<script src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/bootstrap.min.js.下载"></script>
+<link href="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/marvin.nav.my1607.css" rel="stylesheet">
+<link href="hhttps://files.cnblogs.com/files/lixuwu/bundle-SimpleMemory-A5.css" rel="stylesheet">
+<script type="text/javascript" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/marvin.cnblogs.js.下载"></script>
+<script type="text/javascript" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/marvin.nav.my1607.js.下载"></script>
+
+<!-- 返回顶部小火箭注释 -->
+<style>
+#back-top {
+     position: fixed;
+     bottom: 10px;
+     right: 5px;
+     z-index: 99;
+}
+#back-top span {
+     width: 50px;
+     height: 64px;
+     display: block;
+     background:url(http://images.cnblogs.com/cnblogs_com/seanshao/855033/o_rocket.png) no-repeat center center;
+}
+#back-top a{outline:none}
+</style>
+<script type="text/javascript">
+$(function() {
+	// hide #back-top first
+	$("#back-top").hide();
+	// fade in #back-top
+	$(window).scroll(function() {
+		if ($(this).scrollTop() > 500) {
+			$('#back-top').fadeIn();
+		} else {
+			$('#back-top').fadeOut();
+		}
+	});
+	// scroll body to 0px on click
+	$('#back-top a').click(function() {
+		$('body,html').animate({
+			scrollTop: 0
+		}, 800);
+		return false;
+	});
+});
+</script>
+<p id="back-top" style="display: none;"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#top"><span></span></a></p>
+<!--PageBeginHtml Block End-->
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="https://www.cnblogs.com/lixuwu/"><img id="blogLogo" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/logo.gif" alt="返回主页"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="https://www.cnblogs.com/lixuwu/">CS408</a></h1>
+<h2>天下事有难易乎？为之，则难者亦易矣；不为，则易者亦难矣。
+人之为学有难易乎？学之，则难者亦易矣；不学，则易者亦难矣。</h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">博客园</a></li>
+<li><a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/lixuwu/">首页</a></li>
+<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li></li>
+<li><a id="blog_nav_rss" class="menu" href="https://www.cnblogs.com/lixuwu/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="https://www.cnblogs.com/lixuwu/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<span id="stats_post_count">随笔 - 479&nbsp; </span>
+<span id="stats_article_count">文章 - 1&nbsp; </span>
+<span id="stats-comment_count">评论 - 33</span>
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+        <div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="https://www.cnblogs.com/lixuwu/p/5804793.html">Spring boot——logback 基础使用篇（一）</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body" class="blogpost-body"><a name="_labelTop"></a><div id="navCategory"><p style="font-size:18px"><b>阅读目录</b></p><ul><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_label0">1 简单日志配置</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_label1">2 logback的介绍及配置</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_label2">3 logback的使用</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_label3">4 sts（spring tool suite）配置彩色日志</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_label4">5 logback.xml配置示例</a></li></ul></div><div style="text-align: right"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_labelTop">回到顶部</a><a name="_label0"></a></div><h1 id="autoid-0-0-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">1 简单日志配置</span></h1>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">spring boot内部使用Commons Logging来记录日志，但也保留外部接口可以让一些日志框架来进行实现，例如Java Util Logging,Log4J2还有Logback。如果你想用某一种日志框架来进行实现的话，就必须先配置，默认情况下，spring boot使用Logback作为日志实现的框架。</span></p>
+<h2 id="autoid-1-0-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">1.1 配置控制台日志的debug级别</span></h2>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">默认情况下，spring boot从控制台打印出来的日志级别只有ERROR, WARN 还有INFO，如果你想要打印debug级别的日志，可以通过application.properites配置debug=true</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-family: &#39;Microsoft YaHei&#39;;">debug=<span style="color: #0000ff;">true</span></span></pre>
+</div>
+<h2 id="autoid-1-1-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">1.2 在生产环境环境下，你可以通过命令行进行配置日志的debug级别</span></h2>
+<div class="cnblogs_code">
+<pre><span style="font-family: &#39;Microsoft YaHei&#39;;">java -jar C:\Users\Administrator\Desktop\xx\demo.jar --debug</span></pre>
+</div>
+<h2 id="autoid-1-2-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">1.3 配置logging.level.*来具体输出哪些包的日志级别</span></h2>
+<div class="cnblogs_code">
+<pre><span style="font-family: &#39;Microsoft YaHei&#39;;">logging.level.root=<span style="color: #000000;">INFO
+logging.level.org.springframework.web</span>=<span style="color: #000000;">DEBUG
+logging.level.org.hibernate</span>=ERROR</span></pre>
+</div>
+<h2 id="autoid-1-3-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">1.4 将日志输出到文件中</span></h2>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">默认情况下spring boot是不将日志输出到日志文件中，但你可以通过在application.properites文件中配置logging.file文件名称和logging.path文件路径，将日志输出到文件中</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-family: &#39;Microsoft YaHei&#39;;">logging.path=F:\\<span style="color: #000000;">demo
+logging.file</span>=<span style="color: #000000;">demo.log
+logging.level.root</span>=info</span></pre>
+</div>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;; color: #ff0000;">这里需要注意几点：</span></p>
+<ol>
+<li><span style="font-family: &#39;Microsoft YaHei&#39;;">这里若不配置具体的包的日志级别，日志文件信息将为空</span></li>
+<li><span style="font-family: &#39;Microsoft YaHei&#39;;">若只配置logging.path，那么将会在F:\demo文件夹生成一个日志文件为<span style="color: #ff0000;">spring.log（ps：该文件名是固定的，不能更改）。如果path路径不存在，会自动创建该文件夹</span></span></li>
+<li><span style="font-family: &#39;Microsoft YaHei&#39;;"><span style="font-family: &#39;Microsoft YaHei&#39;;">若只配置logging.file，那将会在项目的当前路径下生成一个demo.log日志文件。这里可以使用绝对路径如，会自动在e盘下创建文件夹和相应的日志文件。</span></span>
+<div class="cnblogs_code">
+<pre>logging.file=e:\\demo\\demo.log</pre>
+</div>
+<p>&nbsp;</p>
+</li>
+<li><span style="font-family: &#39;Microsoft YaHei&#39;;">logging.path和logging.file同时配置，不会在这个路径有F:\demo\demo.log日志生成，logging.path和logging.file不会进行叠加（要注意）</span></li>
+<li><span style="font-family: &#39;Microsoft YaHei&#39;;">logging.path和logging.file的value都可以是相对路径或者绝对路径</span></li>
+</ol>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">这就是基础的日志配置，可以直接在application.properties配置，我们还可以在classpath路径下，通过定义具体的日志文件来配置——logback.xml</span></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_labelTop">回到顶部</a><a name="_label1"></a></div><h1 id="autoid-1-4-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">2 logback的介绍及配置</span></h1>
+<h2 id="autoid-2-0-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">2.1 logback的介绍</span></h2>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp; Logback是由log4j创始人设计的又一个开源日志组件。logback当前分成三个模块：logback-core,logback- classic和logback-access。logback-core是其它两个模块的基础模块。logback-classic是log4j的一个 改良版本。此外logback-classic完整实现<a href="http://www.oschina.net/p/slf4j">SLF4J API</a>使你可以很方便地更换成其它日志系统如log4j或JDK14 Logging。logback-access访问模块与Servlet容器集成提供通过Http来访问日志的功能。 Logback是要与SLF4J结合起来用两个组件的官方网站如下：</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp; &nbsp;logback的官方网站：&nbsp;<a href="http://logback.qos.ch/download.html">http://logback.qos.ch</a></span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp; SLF4J的官方网站：<a href="http://www.slf4j.org/download.html">http://www.slf4j.org</a></span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp; 本文章用到的组件如下：请自行到官方网站下载！</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp;logback-access-1.0.0.jar</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp; logback-classic-1.0.0.jar</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp; logback-core-1.0.0.jar</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp; slf4j-api-1.6.0.jar</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp; &nbsp; maven配置</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-family: &#39;Microsoft YaHei&#39;;"><span style="color: #0000ff;">&lt;</span><span style="color: #800000;">dependency</span><span style="color: #0000ff;">&gt;</span>  
+       <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">groupId</span><span style="color: #0000ff;">&gt;</span>ch.qos.logback<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">groupId</span><span style="color: #0000ff;">&gt;</span>  
+       <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">artifactId</span><span style="color: #0000ff;">&gt;</span>logback-classic<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">artifactId</span><span style="color: #0000ff;">&gt;</span>  
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">version</span><span style="color: #0000ff;">&gt;</span>1.0.11<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">version</span><span style="color: #0000ff;">&gt;</span>  
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">dependency</span><span style="color: #0000ff;">&gt;</span> </span></pre>
+</div>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp; &nbsp; 这样依赖包全部自动下载了！</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">ps:在spring boot项目中，会默认引入logback相关的jar包。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/755171-20160826160747444-1797175787.png" alt=""></span></p>
+<h2 id="autoid-2-1-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">2.2 logback取代 log4j的理由：</span></h2>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp; Logback和log4j是非常相似的，如果你对log4j很熟悉，那对logback很快就会得心应手。下面列了logback相对于log4j的一些优点：</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 1、更快的实现</strong>&nbsp; Logback的内核重写了，在一些关键执行路径上性能提升10倍以上。而且logback不仅性能提升了，初始化内存加载也更小了。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 2、非常充分的测试</strong>&nbsp; Logback经过了几年，数不清小时的测试。Logback的测试完全不同级别的。在作者的观点，这是简单重要的原因选择logback而不是log4j。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 3、Logback-classic非常自然实现了SLF4j</strong>&nbsp;&nbsp;&nbsp; Logback-classic实现了 SLF4j。在使用SLF4j中，你都感觉不到logback-classic。而且因为logback-classic非常自然地实现了SLF4J，&nbsp; 所 以切换到log4j或者其他，非常容易，只需要提供成另一个jar包就OK，根本不需要去动那些通过SLF4JAPI实现的代码。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 4、非常充分的文档</strong>&nbsp; 官方网站有两百多页的文档。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 5、自动重新加载配置文件&nbsp;</strong>&nbsp;当配置文件修改了，Logback-classic能自动重新加载配置文件。扫描过程快且安全，它并不需要另外创建一个扫描线程。这个技术充分保证了应用程序能跑得很欢在JEE环境里面。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 6、Lilith</strong>&nbsp;&nbsp; Lilith是log事件的观察者，和log4j的chainsaw类似。而lilith还能处理大数量的log数据 。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 7、谨慎的模式和非常友好的恢复&nbsp;</strong>&nbsp;在谨慎模式下，多个FileAppender实例跑在多个JVM下，能 够安全地写道同一个日志文件。RollingFileAppender会有些限制。Logback的FileAppender和它的子类包括 RollingFileAppender能够非常友好地从I/O异常中恢复。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 8、配置文件可以处理不同的情况&nbsp;&nbsp;</strong>&nbsp;开发人员经常需要判断不同的Logback配置文件在不同的环境下（开发，测试，生产）。而这些配置文件仅仅只有一些很小的不同，可以通过,和来实现，这样一个配置文件就可以适应多个环境。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 9、Filters（过滤器）&nbsp;</strong>&nbsp;有些时候，需要诊断一个问题，需要打出日志。在log4j，只有降低日志级别，不过这样会打出大量的日志，会影响应用性能。在Logback，你可以继续 保持那个日志级别而除掉某种特殊情况，如alice这个用户登录，她的日志将打在DEBUG级别而其他用户可以继续打在WARN级别。要实现这个功能只需 加4行XML配置。可以参考MDCFIlter 。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp; 10、SiftingAppender（一个非常多功能的Appender）</strong>&nbsp; 它可以用来分割日志文件根据任何一个给定的运行参数。如，SiftingAppender能够区别日志事件跟进用户的Session，然后每个用户会有一个日志文件。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp; 11、自动压缩已经打出来的log</strong>&nbsp;&nbsp;RollingFileAppender在产生新文件的时候，会自动压缩已经打出来的日志文件。压缩是个异步过程，所以甚至对于大的日志文件，在压缩过程中应用不会受任何影响。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp; 12、堆栈树带有包版本&nbsp;</strong>&nbsp;Logback在打出堆栈树日志时，会带上包的数据。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp; 13、自动去除旧的日志文件</strong>&nbsp; 通过设置TimeBasedRollingPolicy或者SizeAndTimeBasedFNATP的maxHistory属性，你可以控制已经产生日志文件的最大数量。如果设置maxHistory 12，那那些log文件超过12个月的都会被自动移除。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp; 总之，logback比log4j太优秀了，让我们的应用全部建立logback上吧 ！</span></p>
+<h2 id="autoid-2-2-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">2.3&nbsp;<strong>Logback的配置介绍</strong></span></h2>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp;<strong>1、Logger、appender及layout</strong></span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logger作为日志的记录器，把它关联到应用的对应的context上后，主要用于存放日志对象，也可以定义日志类型、级别。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp; Appender主要用于指定日志输出的目的地，目的地可以是控制台、文件、远程套接字服务器、&nbsp;MySQL、&nbsp;PostreSQL、&nbsp;Oracle和其他数据库、&nbsp;JMS和远程UNIX Syslog守护进程等。&nbsp;</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp; Layout&nbsp;负责把事件转换成字符串，格式化的日志信息的输出。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp; &nbsp; 2、logger context</strong></span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;各个logger&nbsp;都被关联到一个&nbsp;LoggerContext，LoggerContext负责制造logger，也负责以树结构排列各&nbsp;logger。其他所有logger也通过org.slf4j.LoggerFactory&nbsp;类的静态方法getLogger取得。&nbsp;getLogger方法以&nbsp;logger&nbsp;名称为参数。用同一名字调用LoggerFactory.getLogger&nbsp;方法所得到的永远都是同一个logger对象的引用。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp; 3、有效级别及级别的继承</strong></span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logger&nbsp;可以被分配级别。级别包括：TRACE、DEBUG、INFO、WARN&nbsp;和&nbsp;ERROR，定义于&nbsp;ch.qos.logback.classic.Level类。如果&nbsp;logger没有被分配级别，那么它将从有被分配级别的最近的祖先那里继承级别。root logger&nbsp;默认级别是&nbsp;DEBUG。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;<strong>4、打印方法与基本的选择规则</strong></span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong>打印方法决定记录请求的级别。例如，如果&nbsp;L&nbsp;是一个&nbsp;logger&nbsp;实例，那么，语句&nbsp;L.info("..")是一条级别为&nbsp;INFO&nbsp;的记录语句。记录请求的级别在高于或等于其&nbsp;logger&nbsp;的有效级别时被称为被启用，否则，称为被禁用。记录请求级别为&nbsp;p，其logger的有效级别为&nbsp;q，只有则当&nbsp;p&gt;=q时，该请求才会被执行。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong><strong>&nbsp;&nbsp;&nbsp; 该规则是</strong>&nbsp;logback&nbsp;的核心。级别排序为：&nbsp;TRACE &lt; DEBUG &lt; INFO &lt; WARN &lt; ERROR。&nbsp;</strong></span></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_labelTop">回到顶部</a><a name="_label2"></a></div><h1 id="autoid-2-3-0"><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>3 logback的使用</strong></span></h1>
+<h2 id="autoid-3-0-0"><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>3.1 Logback的默认配置</strong></span></h2>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果配置文件&nbsp;logback-test.xml&nbsp;和&nbsp;logback.xml&nbsp;都不存在，那么&nbsp;logback&nbsp;默认地会调用BasicConfigurator&nbsp;，创建一个最小化配置。最小化配置由一个关联到根&nbsp;logger&nbsp;的ConsoleAppender&nbsp;组成。输出用模式为%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n&nbsp;的&nbsp;PatternLayoutEncoder&nbsp;进行格式化。root logger&nbsp;默认级别是&nbsp;DEBUG。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp;&nbsp; 1、Logback的配置文件</strong></span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logback&nbsp;配置文件的语法非常灵活。正因为灵活，所以无法用&nbsp;DTD&nbsp;或&nbsp;XML schema&nbsp;进行定义。尽管如此，可以这样描述<span style="color: #ff0000;">配置文件的基本结构</span>：以&lt;configuration&gt;开头，后面有零个或多个&lt;appender&gt;元素，有零个或多个&lt;logger&gt;元素，有最多一个&lt;root&gt;元素。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp;&nbsp; 2、Logback默认配置的步骤</strong></span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;</strong>&nbsp;&nbsp;&nbsp; (1).&nbsp;尝试在&nbsp;classpath&nbsp;下查找文件&nbsp;logback-test.xml；</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp; (2).&nbsp;如果文件不存在，则查找文件&nbsp;logback.xml；</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;&nbsp;&nbsp;&nbsp; (3).&nbsp;如果两个文件都不存在，logback&nbsp;用&nbsp;Bas icConfigurator&nbsp;自动对自己进行配置，这会导致记录输出到控制台。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>&nbsp;&nbsp;&nbsp; 3、Logback.xml 文件&nbsp;&nbsp;&nbsp;&nbsp;</strong></span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="font-family: &#39;Microsoft YaHei&#39;;"><span style="color: #0000ff;">&lt;?</span><span style="color: #ff00ff;">xml version="1.0" encoding="UTF-8"</span><span style="color: #0000ff;">?&gt;</span>
+<span style="color: #008000;">&lt;!--</span><span style="color: #008000;">
+    Copyright 2010-2011 The myBatis Team
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+        http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+</span><span style="color: #008000;">--&gt;</span>
+<span style="color: #0000ff;">&lt;</span><span style="color: #800000;">configuration </span><span style="color: #ff0000;">debug</span><span style="color: #0000ff;">="false"</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径</span><span style="color: #008000;">--&gt;</span>  
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">property </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="LOG_HOME"</span><span style="color: #ff0000;"> value</span><span style="color: #0000ff;">="/home"</span> <span style="color: #0000ff;">/&gt;</span>  
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 控制台输出 </span><span style="color: #008000;">--&gt;</span>   
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="STDOUT"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.ConsoleAppender"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span style="color: #0000ff;">&gt;</span> 
+             <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符</span><span style="color: #008000;">--&gt;</span> 
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>   
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span> 
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 按照每天生成日志文件 </span><span style="color: #008000;">--&gt;</span>   
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="FILE"</span><span style="color: #ff0000;">  class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.RollingFileAppender"</span><span style="color: #0000ff;">&gt;</span>   
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">rollingPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">日志文件输出的文件名</span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">FileNamePattern</span><span style="color: #0000ff;">&gt;</span>${LOG_HOME}/TestWeb.log.%d{yyyy-MM-dd}.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">FileNamePattern</span><span style="color: #0000ff;">&gt;</span> 
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">日志文件保留天数</span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">MaxHistory</span><span style="color: #0000ff;">&gt;</span>30<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">MaxHistory</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">rollingPolicy</span><span style="color: #0000ff;">&gt;</span>   
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span style="color: #0000ff;">&gt;</span> 
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符</span><span style="color: #008000;">--&gt;</span> 
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>   
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span> 
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">日志文件最大的大小</span><span style="color: #008000;">--&gt;</span>
+       <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">triggeringPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"</span><span style="color: #0000ff;">&gt;</span>
+         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">MaxFileSize</span><span style="color: #0000ff;">&gt;</span>10MB<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">MaxFileSize</span><span style="color: #0000ff;">&gt;</span>
+       <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">triggeringPolicy</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span> 
+   <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> show parameters for hibernate sql 专为 Hibernate 定制 </span><span style="color: #008000;">--&gt;</span> 
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="org.hibernate.type.descriptor.sql.BasicBinder"</span><span style="color: #ff0000;">  level</span><span style="color: #0000ff;">="TRACE"</span> <span style="color: #0000ff;">/&gt;</span>  
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="org.hibernate.type.descriptor.sql.BasicExtractor"</span><span style="color: #ff0000;">  level</span><span style="color: #0000ff;">="DEBUG"</span> <span style="color: #0000ff;">/&gt;</span>  
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="org.hibernate.SQL"</span><span style="color: #ff0000;"> level</span><span style="color: #0000ff;">="DEBUG"</span> <span style="color: #0000ff;">/&gt;</span>  
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="org.hibernate.engine.QueryParameters"</span><span style="color: #ff0000;"> level</span><span style="color: #0000ff;">="DEBUG"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="org.hibernate.engine.query.HQLQueryPlan"</span><span style="color: #ff0000;"> level</span><span style="color: #0000ff;">="DEBUG"</span> <span style="color: #0000ff;">/&gt;</span>  
+    
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">myibatis log configure</span><span style="color: #008000;">--&gt;</span> 
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="com.apache.ibatis"</span><span style="color: #ff0000;"> level</span><span style="color: #0000ff;">="TRACE"</span><span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="java.sql.Connection"</span><span style="color: #ff0000;"> level</span><span style="color: #0000ff;">="DEBUG"</span><span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="java.sql.Statement"</span><span style="color: #ff0000;"> level</span><span style="color: #0000ff;">="DEBUG"</span><span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="java.sql.PreparedStatement"</span><span style="color: #ff0000;"> level</span><span style="color: #0000ff;">="DEBUG"</span><span style="color: #0000ff;">/&gt;</span>
+    
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志输出级别 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">root </span><span style="color: #ff0000;">level</span><span style="color: #0000ff;">="INFO"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="STDOUT"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="FILE"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">root</span><span style="color: #0000ff;">&gt;</span> 
+     <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">日志异步到数据库 </span><span style="color: #008000;">--&gt;</span>  
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="DB"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.classic.db.DBAppender"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">日志异步到数据库 </span><span style="color: #008000;">--&gt;</span> 
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">connectionSource </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.db.DriverManagerConnectionSource"</span><span style="color: #0000ff;">&gt;</span>
+           <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">连接池 </span><span style="color: #008000;">--&gt;</span> 
+           <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">dataSource </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="com.mchange.v2.c3p0.ComboPooledDataSource"</span><span style="color: #0000ff;">&gt;</span>
+              <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">driverClass</span><span style="color: #0000ff;">&gt;</span>com.mysql.jdbc.Driver<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">driverClass</span><span style="color: #0000ff;">&gt;</span>
+              <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">url</span><span style="color: #0000ff;">&gt;</span>jdbc:mysql://127.0.0.1:3306/databaseName<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">url</span><span style="color: #0000ff;">&gt;</span>
+              <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">user</span><span style="color: #0000ff;">&gt;</span>root<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">user</span><span style="color: #0000ff;">&gt;</span>
+              <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">password</span><span style="color: #0000ff;">&gt;</span>root<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">password</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">dataSource</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">connectionSource</span><span style="color: #0000ff;">&gt;</span>
+  <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span></span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<h2 id="autoid-3-1-0"><span style="font-family: &#39;Microsoft YaHei&#39;;"><strong>3.2 在程序用引用Logback</strong></span></h2>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="font-family: &#39;Microsoft YaHei&#39;;"><span style="color: #0000ff;">package</span><span style="color: #000000;"> com.stu.system.action; 
+
+</span><span style="color: #0000ff;">import</span><span style="color: #000000;"> org.slf4j.Logger;
+</span><span style="color: #0000ff;">import</span><span style="color: #000000;"> org.slf4j.LoggerFactory;
+
+</span><span style="color: #0000ff;">public</span> <span style="color: #0000ff;">class</span><span style="color: #000000;"> BlogAction{
+     </span><span style="color: #008000;">//</span><span style="color: #008000;">定义一个全局的记录器，通过LoggerFactory获取</span>
+     <span style="color: #0000ff;">private</span> <span style="color: #0000ff;">final</span> <span style="color: #0000ff;">static</span> Logger logger = LoggerFactory.getLogger(BlogAction.<span style="color: #0000ff;">class</span><span style="color: #000000;">); 
+     </span><span style="color: #008000;">/**</span><span style="color: #008000;">
+     * </span><span style="color: #808080;">@param</span><span style="color: #008000;"> args
+     </span><span style="color: #008000;">*/</span>
+    <span style="color: #0000ff;">public</span> <span style="color: #0000ff;">static</span> <span style="color: #0000ff;">void</span><span style="color: #000000;"> main(String[] args) {
+        logger.info(</span>"logback 成功了"<span style="color: #000000;">);
+        logger.error(</span>"logback 成功了"<span style="color: #000000;">);
+    }
+}</span></span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<div style="text-align: right"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_labelTop">回到顶部</a><a name="_label3"></a></div><h1 id="autoid-3-2-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">4 sts（spring tool suite）配置彩色日志</span></h1>
+<h2 id="autoid-4-0-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">4.1 原理</span></h2>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">核心就是让Eclipse的控制台支持ANSI Escape Color——一种国际标准，<strong>使用特定字符表示颜色</strong>。即让Eclipse的Console对表示颜色的特定字符进行转义（Escape），而不要直接输出。</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">首先让sts支持ANSI</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/755171-20160824225957308-736294991.png" alt=""></span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">重启IDE，如下所示则表示成功</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/755171-20160824230028651-1396522288.png" alt="" width="589" height="707"></span></p>
+<h2 id="autoid-4-1-0"><span style="font-family: &#39;Microsoft YaHei&#39;;">4.2 代码设置</span></h2>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">如果你的终端支持ANSI，设置彩色输出会让日志更具可读性。通过在&nbsp;<code>application.properties</code>&nbsp;中设置&nbsp;<code>spring.output.ansi.enabled</code>&nbsp;参数来支持。</span></p>
+<ul>
+<li><span style="font-family: &#39;Microsoft YaHei&#39;;">NEVER：禁用ANSI-colored输出（默认项）</span></li>
+<li><span style="font-family: &#39;Microsoft YaHei&#39;;">DETECT：会检查终端是否支持ANSI，是的话就采用彩色输出（推荐项）</span></li>
+<li><span style="font-family: &#39;Microsoft YaHei&#39;;">ALWAYS：总是使用ANSI-colored格式输出，若终端不支持的时候，会有很多干扰信息，不推荐使用</span></li>
+</ul>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">注意：这里自己在测试时候，只有设置为如下参数时，彩色日志有效。</span></p>
+<div class="cnblogs_code">
+<pre><span style="font-family: &#39;Microsoft YaHei&#39;;">spring.output.ansi.enabled=ALWAYS</span></pre>
+</div>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;我使用的是logback，只需要将下面代码插入到logback.xml文件，并在<code>appender-ref</code>指定<code>CONSOLE</code>即可，具体实现代码如下：</span></p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="font-family: &#39;Microsoft YaHei&#39;;"><span style="color: #0000ff;">&lt;?</span><span style="color: #ff00ff;">xml version="1.0" encoding="UTF-8"</span><span style="color: #0000ff;">?&gt;</span>
+
+<span style="color: #0000ff;">&lt;</span><span style="color: #800000;">configuration </span><span style="color: #ff0000;">debug</span><span style="color: #0000ff;">="false"</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径</span><span style="color: #008000;">--&gt;</span>  
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">property </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="LOG_HOME"</span><span style="color: #ff0000;"> value</span><span style="color: #0000ff;">="F://slog"</span> <span style="color: #0000ff;">/&gt;</span>  
+    
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 彩色日志 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 彩色日志依赖的渲染类 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">conversionRule </span><span style="color: #ff0000;">conversionWord</span><span style="color: #0000ff;">="clr"</span><span style="color: #ff0000;"> converterClass</span><span style="color: #0000ff;">="org.springframework.boot.logging.logback.ColorConverter"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">conversionRule </span><span style="color: #ff0000;">conversionWord</span><span style="color: #0000ff;">="wex"</span><span style="color: #ff0000;"> converterClass</span><span style="color: #0000ff;">="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">conversionRule </span><span style="color: #ff0000;">conversionWord</span><span style="color: #0000ff;">="wEx"</span><span style="color: #ff0000;"> converterClass</span><span style="color: #0000ff;">="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 彩色日志格式 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">property </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="CONSOLE_LOG_PATTERN"</span><span style="color: #ff0000;"> value</span><span style="color: #0000ff;">="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> Console 输出设置 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="STDOUT"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.ConsoleAppender"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>${CONSOLE_LOG_PATTERN}<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>utf8<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>
+    
+    
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 不带彩色的日志在控制台输出时候的设置 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> &lt;appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"&gt;
+        &lt;encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder"&gt; 
+             格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 
+            &lt;pattern&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n&lt;/pattern&gt;   
+        &lt;/encoder&gt; 
+    &lt;/appender&gt; </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 按照每天生成日志文件 </span><span style="color: #008000;">--&gt;</span>   
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="FILE"</span><span style="color: #ff0000;">  class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.RollingFileAppender"</span><span style="color: #0000ff;">&gt;</span>   
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">rollingPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">日志文件输出的文件名</span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">FileNamePattern</span><span style="color: #0000ff;">&gt;</span>${LOG_HOME}/springboot00.log.%d{yyyy-MM-dd}.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">FileNamePattern</span><span style="color: #0000ff;">&gt;</span> 
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">日志文件保留天数</span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">MaxHistory</span><span style="color: #0000ff;">&gt;</span>30<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">MaxHistory</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">rollingPolicy</span><span style="color: #0000ff;">&gt;</span>   
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span style="color: #0000ff;">&gt;</span> 
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符</span><span style="color: #008000;">--&gt;</span> 
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>   
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span> 
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">日志文件最大的大小</span><span style="color: #008000;">--&gt;</span>
+       <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">triggeringPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy"</span><span style="color: #0000ff;">&gt;</span>
+         <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">MaxFileSize</span><span style="color: #0000ff;">&gt;</span>10MB<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">MaxFileSize</span><span style="color: #0000ff;">&gt;</span>
+       <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">triggeringPolicy</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span> 
+   <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> show parameters for hibernate sql 专为 Hibernate 定制 </span><span style="color: #008000;">--&gt;</span> 
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> &lt;logger name="org.hibernate.type.descriptor.sql.BasicBinder"  level="TRACE" /&gt;  
+    &lt;logger name="org.hibernate.type.descriptor.sql.BasicExtractor"  level="DEBUG" /&gt;  
+    &lt;logger name="org.hibernate.SQL" level="DEBUG" /&gt;  
+    &lt;logger name="org.hibernate.engine.QueryParameters" level="DEBUG" /&gt;
+    &lt;logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" /&gt;  </span><span style="color: #008000;">--&gt;</span> 
+    
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">myibatis log configure</span><span style="color: #008000;">--&gt;</span> 
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> &lt;logger name="com.apache.ibatis" level="TRACE"/&gt;
+    &lt;logger name="java.sql.Connection" level="DEBUG"/&gt;
+    &lt;logger name="java.sql.Statement" level="DEBUG"/&gt;
+    &lt;logger name="java.sql.PreparedStatement" level="DEBUG"/&gt; </span><span style="color: #008000;">--&gt;</span>
+    
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志输出级别 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">root </span><span style="color: #ff0000;">level</span><span style="color: #0000ff;">="INFO"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="STDOUT"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="FILE"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">root</span><span style="color: #0000ff;">&gt;</span> 
+     <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">日志异步到数据库 </span><span style="color: #008000;">--&gt;</span>  
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> &lt;appender name="DB" class="ch.qos.logback.classic.db.DBAppender"&gt;
+        日志异步到数据库 
+        &lt;connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource"&gt;
+           连接池 
+           &lt;dataSource class="com.mchange.v2.c3p0.ComboPooledDataSource"&gt;
+              &lt;driverClass&gt;com.mysql.jdbc.Driver&lt;/driverClass&gt;
+              &lt;url&gt;jdbc:mysql://127.0.0.1:3306/databaseName&lt;/url&gt;
+              &lt;user&gt;root&lt;/user&gt;
+              &lt;password&gt;root&lt;/password&gt;
+            &lt;/dataSource&gt;
+        &lt;/connectionSource&gt;
+  &lt;/appender&gt; </span><span style="color: #008000;">--&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span></span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;效果如下：</span></p>
+<p><span style="font-family: &#39;Microsoft YaHei&#39;;">&nbsp;<img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/755171-20160824231031276-1024341443.png" alt=""></span></p>
+<div style="text-align: right"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#_labelTop">回到顶部</a><a name="_label4"></a></div><h1 id="autoid-4-2-0">5 logback.xml配置示例</h1>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre><span style="color: #0000ff;">&lt;?</span><span style="color: #ff00ff;">xml version="1.0" encoding="UTF-8"</span><span style="color: #0000ff;">?&gt;</span>
+<span style="color: #0000ff;">&lt;</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">
+       说明：
+       1、日志级别及文件
+           日志记录采用分级记录，级别与日志文件名相对应，不同级别的日志信息记录到不同的日志文件中
+           例如：error级别记录到log_error_xxx.log或log_error.log（该文件为当前记录的日志文件），而log_error_xxx.log为归档日志，
+           日志文件按日期记录，同一天内，若日志文件大小等于或大于2M，则按0、1、2...顺序分别命名
+           例如log-level-2013-12-21.0.log
+           其它级别的日志也是如此。
+       2、文件路径
+           若开发、测试用，在Eclipse中运行项目，则到Eclipse的安装路径查找logs文件夹，以相对路径../logs。
+           若部署到Tomcat下，则在Tomcat下的logs文件中
+       3、Appender
+           FILEERROR对应error级别，文件名以log-error-xxx.log形式命名
+           FILEWARN对应warn级别，文件名以log-warn-xxx.log形式命名
+           FILEINFO对应info级别，文件名以log-info-xxx.log形式命名
+           FILEDEBUG对应debug级别，文件名以log-debug-xxx.log形式命名
+           stdout将日志信息输出到控制上，为方便开发测试使用
+    </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">contextName</span><span style="color: #0000ff;">&gt;</span>SpringBootDemo<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">contextName</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">property </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="LOG_PATH"</span><span style="color: #ff0000;"> value</span><span style="color: #0000ff;">="D:\\JavaWebLogs"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">设置系统日志目录</span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">property </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="APPDIR"</span><span style="color: #ff0000;"> value</span><span style="color: #0000ff;">="SpringBootDemo"</span> <span style="color: #0000ff;">/&gt;</span>
+
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志记录器，日期滚动记录 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="FILEERROR"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.RollingFileAppender"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 正在记录的日志文件的路径及文件名 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span>${LOG_PATH}/${APPDIR}/log_error.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志记录器的滚动策略，按日期，按大小记录 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">rollingPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 归档的日志文件的路径，例如今天是2013-12-21日志，当前写的日志文件路径为file节点指定，可以将此文件与file指定文件路径设置为不同路径，从而将当前日志文件或归档日志文件置不同的目录。
+            而2013-12-21的日志文件在由fileNamePattern指定。%d{yyyy-MM-dd}指定日期格式，%i指定索引 </span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span>${LOG_PATH}/${APPDIR}/error/log-error-%d{yyyy-MM-dd}.%i.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
+            命名日志文件，例如log-error-2013-12-21.0.log </span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">timeBasedFileNamingAndTriggeringPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"</span><span style="color: #0000ff;">&gt;</span>
+                <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">maxFileSize</span><span style="color: #0000ff;">&gt;</span>2MB<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">maxFileSize</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">timeBasedFileNamingAndTriggeringPolicy</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">rollingPolicy</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 追加方式记录日志 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">append</span><span style="color: #0000ff;">&gt;</span>true<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">append</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志文件的格式 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>===%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger Line:%-3L - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>utf-8<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 此日志文件只记录info级别的 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">filter </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.filter.LevelFilter"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">level</span><span style="color: #0000ff;">&gt;</span>error<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">level</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">onMatch</span><span style="color: #0000ff;">&gt;</span>ACCEPT<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">onMatch</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">onMismatch</span><span style="color: #0000ff;">&gt;</span>DENY<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">onMismatch</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">filter</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>
+
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志记录器，日期滚动记录 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="FILEWARN"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.RollingFileAppender"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 正在记录的日志文件的路径及文件名 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span>${LOG_PATH}/${APPDIR}/log_warn.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志记录器的滚动策略，按日期，按大小记录 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">rollingPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 归档的日志文件的路径，例如今天是2013-12-21日志，当前写的日志文件路径为file节点指定，可以将此文件与file指定文件路径设置为不同路径，从而将当前日志文件或归档日志文件置不同的目录。
+            而2013-12-21的日志文件在由fileNamePattern指定。%d{yyyy-MM-dd}指定日期格式，%i指定索引 </span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span>${LOG_PATH}/${APPDIR}/warn/log-warn-%d{yyyy-MM-dd}.%i.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
+            命名日志文件，例如log-error-2013-12-21.0.log </span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">timeBasedFileNamingAndTriggeringPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"</span><span style="color: #0000ff;">&gt;</span>
+                <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">maxFileSize</span><span style="color: #0000ff;">&gt;</span>2MB<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">maxFileSize</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">timeBasedFileNamingAndTriggeringPolicy</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">rollingPolicy</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 追加方式记录日志 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">append</span><span style="color: #0000ff;">&gt;</span>true<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">append</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志文件的格式 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>===%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger Line:%-3L - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>utf-8<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 此日志文件只记录info级别的 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">filter </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.filter.LevelFilter"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">level</span><span style="color: #0000ff;">&gt;</span>warn<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">level</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">onMatch</span><span style="color: #0000ff;">&gt;</span>ACCEPT<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">onMatch</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">onMismatch</span><span style="color: #0000ff;">&gt;</span>DENY<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">onMismatch</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">filter</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>
+
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志记录器，日期滚动记录 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="FILEINFO"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.RollingFileAppender"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 正在记录的日志文件的路径及文件名 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span>${LOG_PATH}/${APPDIR}/log_info.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">file</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志记录器的滚动策略，按日期，按大小记录 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">rollingPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 归档的日志文件的路径，例如今天是2013-12-21日志，当前写的日志文件路径为file节点指定，可以将此文件与file指定文件路径设置为不同路径，从而将当前日志文件或归档日志文件置不同的目录。
+            而2013-12-21的日志文件在由fileNamePattern指定。%d{yyyy-MM-dd}指定日期格式，%i指定索引 </span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span>${LOG_PATH}/${APPDIR}/info/log-info-%d{yyyy-MM-dd}.%i.log<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">fileNamePattern</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 除按日志记录之外，还配置了日志文件不能超过2M，若超过2M，日志文件会以索引0开始，
+            命名日志文件，例如log-error-2013-12-21.0.log </span><span style="color: #008000;">--&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">timeBasedFileNamingAndTriggeringPolicy </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"</span><span style="color: #0000ff;">&gt;</span>
+                <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">maxFileSize</span><span style="color: #0000ff;">&gt;</span>2MB<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">maxFileSize</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">timeBasedFileNamingAndTriggeringPolicy</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">rollingPolicy</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 追加方式记录日志 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">append</span><span style="color: #0000ff;">&gt;</span>true<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">append</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 日志文件的格式 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>===%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger Line:%-3L - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>utf-8<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 此日志文件只记录info级别的 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">filter </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.filter.LevelFilter"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">level</span><span style="color: #0000ff;">&gt;</span>info<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">level</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">onMatch</span><span style="color: #0000ff;">&gt;</span>ACCEPT<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">onMatch</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">onMismatch</span><span style="color: #0000ff;">&gt;</span>DENY<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">onMismatch</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">filter</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="STDOUT"</span><span style="color: #ff0000;"> class</span><span style="color: #0000ff;">="ch.qos.logback.core.ConsoleAppender"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">encoder 默认配置为PatternLayoutEncoder</span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>===%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger Line:%-3L - %msg%n<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">pattern</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>utf-8<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">charset</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">encoder</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;">此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息</span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">filter </span><span style="color: #ff0000;">class</span><span style="color: #0000ff;">="ch.qos.logback.classic.filter.ThresholdFilter"</span><span style="color: #0000ff;">&gt;</span>
+            <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">level</span><span style="color: #0000ff;">&gt;</span>debug<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">level</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">filter</span><span style="color: #0000ff;">&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">appender</span><span style="color: #0000ff;">&gt;</span>
+
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="org.springframework"</span><span style="color: #ff0000;"> level</span><span style="color: #0000ff;">="WARN"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">logger </span><span style="color: #ff0000;">name</span><span style="color: #0000ff;">="org.hibernate"</span><span style="color: #ff0000;"> level</span><span style="color: #0000ff;">="WARN"</span> <span style="color: #0000ff;">/&gt;</span>
+
+    <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 生产环境下，将此级别配置为适合的级别，以免日志文件太多或影响程序性能 </span><span style="color: #008000;">--&gt;</span>
+    <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">root </span><span style="color: #ff0000;">level</span><span style="color: #0000ff;">="INFO"</span><span style="color: #0000ff;">&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="FILEERROR"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="FILEWARN"</span> <span style="color: #0000ff;">/&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="FILEINFO"</span> <span style="color: #0000ff;">/&gt;</span>
+
+        <span style="color: #008000;">&lt;!--</span><span style="color: #008000;"> 生产环境将请stdout,testfile去掉 </span><span style="color: #008000;">--&gt;</span>
+        <span style="color: #0000ff;">&lt;</span><span style="color: #800000;">appender-ref </span><span style="color: #ff0000;">ref</span><span style="color: #0000ff;">="STDOUT"</span> <span style="color: #0000ff;">/&gt;</span>
+    <span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">root</span><span style="color: #0000ff;">&gt;</span>
+<span style="color: #0000ff;">&lt;/</span><span style="color: #800000;">configuration</span><span style="color: #0000ff;">&gt;</span></pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;</p><br><hr><pre>如果您觉得阅读本文对您有帮助，请点一下“<b>推荐</b>”按钮，让更多的人能够享受到获取知识的快乐！因为本人初入职场，鉴于自身阅历有限，<b>所以本博客内容大部分来源于网络中已有知识的汇总</b>，欢迎各位转载，评论，大家一起学习进步！如有侵权，请及时和我联系，切实维护您的权益！</pre></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="https://www.cnblogs.com/lixuwu/category/853849.html" target="_blank">Spring</a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(5804793,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;b1051354-e5f5-e411-b908-9dcfd8948a71&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/lixuwu/" target="_blank"><img src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/20160717235103.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/lixuwu/">CS408</a><br>
+            <a href="https://home.cnblogs.com/u/lixuwu/followees">关注 - 3</a><br>
+            <a href="https://home.cnblogs.com/u/lixuwu/followers">粉丝 - 72</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;b1051354-e5f5-e411-b908-9dcfd8948a71&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(5804793,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">31</span>
+    </div>
+    <div class="buryit" onclick="votePost(5804793,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+<script type="text/javascript">
+    currentDiggType = 0;
+</script></div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="https://www.cnblogs.com/lixuwu/p/5801596.html" class="p_n_p_prefix">« </a> 上一篇：<a href="https://www.cnblogs.com/lixuwu/p/5801596.html" title="发布于2016-08-24 09:24">（转）Windows7下命令行使用MySQL</a><br><a href="https://www.cnblogs.com/lixuwu/p/5810912.html" class="p_n_p_prefix">» </a> 下一篇：<a href="https://www.cnblogs.com/lixuwu/p/5810912.html" title="发布于2016-08-26 16:36">（转）Spring boot——logback.xml 配置详解（二）</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2016-08-24 22:03</span> <a href="https://www.cnblogs.com/lixuwu/">CS408</a> 阅读(<span id="post_view_count">115559</span>) 评论(<span id="post_comment_count">15</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=5804793" rel="nofollow">编辑</a> <a href="https://www.cnblogs.com/lixuwu/p/5804793.html#" onclick="AddToWz(5804793);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=226975,cb_entryId=5804793,cb_blogApp=currentBlogApp,cb_blogUserGuid='b1051354-e5f5-e411-b908-9dcfd8948a71',cb_entryCreatedDate='2016/8/24 22:03:00';loadViewCount(cb_entryId);var cb_postType=1;var isMarkdown=false;</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"><div id="comments_pager_top"></div>
+<br>
+<div class="feedback_area_title">评论列表</div>
+<div class="feedbackNoItems"></div>	
+
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3739310" class="layer">#1楼</a><a name="3739310" id="comment_anchor_3739310"></a>  <span class="comment_date">2017-07-19 21:35</span> <a id="a_comment_author_3739310" href="https://www.cnblogs.com/Forever-Somnus/" target="_blank">痞子色子</a> <a href="http://msg.cnblogs.com/send/%E7%97%9E%E5%AD%90%E8%89%B2%E5%AD%90" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3739310" class="blog_comment_body">总结的很好 清晰明了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3739310,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3739310,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3739310_avatar" style="display:none;">http://pic.cnblogs.com/face/489132/20140804215145.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3778426" class="layer">#2楼</a><a name="3778426" id="comment_anchor_3778426"></a>  <span class="comment_date">2017-09-08 11:16</span> <a id="a_comment_author_3778426" href="https://www.cnblogs.com/2thend/" target="_blank">临渊现鱼</a> <a href="http://msg.cnblogs.com/send/%E4%B8%B4%E6%B8%8A%E7%8E%B0%E9%B1%BC" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3778426" class="blog_comment_body">这是我见过总结最好的logback文章了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3778426,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3778426,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3778426_avatar" style="display:none;">http://pic.cnblogs.com/face/705181/20141218230304.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3787160" class="layer">#3楼</a><a name="3787160" id="comment_anchor_3787160"></a>  <span class="comment_date">2017-09-17 21:11</span> <a id="a_comment_author_3787160" href="https://www.cnblogs.com/Irving/" target="_blank">花儿笑弯了腰</a> <a href="http://msg.cnblogs.com/send/%E8%8A%B1%E5%84%BF%E7%AC%91%E5%BC%AF%E4%BA%86%E8%85%B0" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3787160" class="blog_comment_body">mark</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3787160,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3787160,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3787160_avatar" style="display:none;">http://pic.cnblogs.com/face/365537/20180727000650.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3815103" class="layer">#4楼</a><a name="3815103" id="comment_anchor_3815103"></a>  <span class="comment_date">2017-10-19 10:21</span> <a id="a_comment_author_3815103" href="https://www.cnblogs.com/xiangyang1996/" target="_blank">lzhxiangyang</a> <a href="http://msg.cnblogs.com/send/lzhxiangyang" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3815103" class="blog_comment_body">写的很好</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3815103,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3815103,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3857113" class="layer">#5楼</a><a name="3857113" id="comment_anchor_3857113"></a>  <span class="comment_date">2017-12-04 09:23</span> <a id="a_comment_author_3857113" href="https://www.cnblogs.com/leetone123/" target="_blank">小石头敲代码</a> <a href="http://msg.cnblogs.com/send/%E5%B0%8F%E7%9F%B3%E5%A4%B4%E6%95%B2%E4%BB%A3%E7%A0%81" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3857113" class="blog_comment_body">总结的太棒啦，跟着你的文档一步一步都实现出来了，就是最后Logback异步同步日志没能实现，我用的阿里巴巴的Druid数据源，结果就一直报错。。。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3857113,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3857113,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3857113_avatar" style="display:none;">http://pic.cnblogs.com/face/1230268/20170901104148.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3857886" class="layer">#6楼</a><a name="3857886" id="comment_anchor_3857886"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2017-12-04 23:01</span> <a id="a_comment_author_3857886" href="https://www.cnblogs.com/lixuwu/" target="_blank">CS408</a> <a href="http://msg.cnblogs.com/send/CS408" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3857886" class="blog_comment_body"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3857113" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3857113);">@</a>
+小石头敲代码<br>哈哈 不好意思 那个我工作中暂时没用到，我只是在网上找了个示例，也没去深究。发现问题才有助于积累知识，你可以再找找其它办法</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3857886,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3857886,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3857886_avatar" style="display:none;">http://pic.cnblogs.com/face/755171/20160717235103.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3859915" class="layer">#7楼</a><a name="3859915" id="comment_anchor_3859915"></a>  <span class="comment_date">2017-12-07 11:18</span> <a id="a_comment_author_3859915" href="http://home.cnblogs.com/u/828771/" target="_blank">纠结的小菜鸟</a> <a href="http://msg.cnblogs.com/send/%E7%BA%A0%E7%BB%93%E7%9A%84%E5%B0%8F%E8%8F%9C%E9%B8%9F" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3859915" class="blog_comment_body">文章很好，思路清晰！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3859915,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3859915,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3869349" class="layer">#8楼</a><a name="3869349" id="comment_anchor_3869349"></a>  <span class="comment_date">2017-12-19 15:50</span> <a id="a_comment_author_3869349" href="https://www.cnblogs.com/LiuChunfu/" target="_blank">LiuChunfu</a> <a href="http://msg.cnblogs.com/send/LiuChunfu" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3869349" class="blog_comment_body">通读了文章，有如下几个问题：<br> logback在springboot中使用，我配置了 logging.level.org.springframework.web=DEBUG<br>logging.level.org.hibernate=ERROR<br>那么：<br>我还需要在logback中配置：<br>    &lt;logger name="org.springframework" level="WARN" /&gt;<br>    &lt;logger name="org.hibernate" level="WARN" /&gt;<br>如果两者等级不一致？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3869349,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3869349,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3869349_avatar" style="display:none;">http://pic.cnblogs.com/face/611599/20140710204929.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3869354" class="layer">#9楼</a><a name="3869354" id="comment_anchor_3869354"></a>  <span class="comment_date">2017-12-19 15:54</span> <a id="a_comment_author_3869354" href="https://www.cnblogs.com/LiuChunfu/" target="_blank">LiuChunfu</a> <a href="http://msg.cnblogs.com/send/LiuChunfu" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3869354" class="blog_comment_body">针对刚提出的问题，思考了下，是不是如果在resource下有了logback.xml 配置文件，那么通过applicationl.properties中的配置就不生效？</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3869354,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3869354,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3869354_avatar" style="display:none;">http://pic.cnblogs.com/face/611599/20140710204929.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3869397" class="layer">#10楼</a><a name="3869397" id="comment_anchor_3869397"></a>[<span class="louzhu">楼主</span>]  <span class="comment_date">2017-12-19 16:22</span> <a id="a_comment_author_3869397" href="https://www.cnblogs.com/lixuwu/" target="_blank">CS408</a> <a href="http://msg.cnblogs.com/send/CS408" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3869397" class="blog_comment_body"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3869354" title="查看所回复的评论" onclick="commentManager.renderComments(0,50,3869354);">@</a>
+LiuChunfu<br>这个我没有测试，感觉也没有测试的必要。因为将一个项目的日志管理配置在不同的地方，不是增加日志维护的难度吗？如果你只是单纯的感兴趣，可以自己做个demo跑一遍。logback.xml的功能已经很强大了，能够满足你所有的日志打印需求。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3869397,&#39;Digg&#39;,this)">支持(1)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3869397,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3869397_avatar" style="display:none;">http://pic.cnblogs.com/face/755171/20160717235103.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#3925990" class="layer">#11楼</a><a name="3925990" id="comment_anchor_3925990"></a>  <span class="comment_date">2018-03-17 21:44</span> <a id="a_comment_author_3925990" href="https://www.cnblogs.com/witpool/" target="_blank">千里驹</a> <a href="http://msg.cnblogs.com/send/%E5%8D%83%E9%87%8C%E9%A9%B9" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_3925990" class="blog_comment_body">见过的最详细的logback文章，很顺利配通。<br>很有帮助，接口也用Wisdom RESTClient调通了<br><a href="https://github.com/Wisdom-Projects/rest-client" target="_blank">https://github.com/Wisdom-Projects/rest-client</a><br><br>谢谢作者的分享！很喜欢logback，赞一个！</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(3925990,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(3925990,&#39;Bury&#39;,this)">反对(0)</a></div><span id="comment_3925990_avatar" style="display:none;">http://pic.cnblogs.com/face/1290665/20181114214505.png</span>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#4050797" class="layer">#12楼</a><a name="4050797" id="comment_anchor_4050797"></a>  <span class="comment_date">2018-08-26 11:05</span> <a id="a_comment_author_4050797" href="https://www.cnblogs.com/FlyBlueSky/" target="_blank">xiaou</a> <a href="http://msg.cnblogs.com/send/xiaou" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4050797" class="blog_comment_body">&lt;connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource"&gt;<br>改为<br>&lt;connectionSource<br>   class="ch.qos.logback.core.db.DataSourceConnectionSource"&gt;</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4050797,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4050797,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#4115838" class="layer">#13楼</a><a name="4115838" id="comment_anchor_4115838"></a>  <span class="comment_date">2018-11-16 11:42</span> <a id="a_comment_author_4115838" href="http://home.cnblogs.com/u/1527911/" target="_blank">AndyZhang1994</a> <a href="http://msg.cnblogs.com/send/AndyZhang1994" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4115838" class="blog_comment_body">我怎么打jar包后,运行了不能保存本地日志了</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4115838,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4115838,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#4120541" class="layer">#14楼</a><a name="4120541" id="comment_anchor_4120541"></a>  <span class="comment_date">2018-11-22 16:07</span> <a id="a_comment_author_4120541" href="http://home.cnblogs.com/u/1536241/" target="_blank">xiaolang0211</a> <a href="http://msg.cnblogs.com/send/xiaolang0211" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4120541" class="blog_comment_body">Java 微服务实践 - Spring Boot 视频: <a href="http://www.chilangedu.com/" target="_blank">http://www.chilangedu.com</a></div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4120541,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4120541,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	
+		<div class="feedbackItem">
+			<div class="feedbackListSubtitle">
+				<div class="feedbackManage">
+					&nbsp;&nbsp;<span class="comment_actions"></span>
+				</div>
+				<a href="https://www.cnblogs.com/lixuwu/p/5804793.html#4256934" class="layer">#15楼</a><a name="4256934" id="comment_anchor_4256934"></a><span id="comment-maxId" style="display:none;">4256934</span><span id="comment-maxDate" style="display:none;">2019/5/16 7:46:51</span>  <span class="comment_date">2019-05-16 07:46</span> <a id="a_comment_author_4256934" href="http://home.cnblogs.com/u/1568231/" target="_blank">唐永双</a> <a href="http://msg.cnblogs.com/send/%E5%94%90%E6%B0%B8%E5%8F%8C" title="发送站内短消息" class="sendMsg2This">&nbsp;</a>
+			</div>
+			<div class="feedbackCon">
+				<div id="comment_body_4256934" class="blog_comment_body">1.这里若不配置具体的包的日志级别，日志文件信息将为空<br><br>这个应该错了，不配置具体包的日志级别日志文件也不会为空。</div><div class="comment_vote"><a href="javascript:void(0);" class="comment_digg" onclick="return voteComment(4256934,&#39;Digg&#39;,this)">支持(0)</a><a href="javascript:void(0);" class="comment_bury" onclick="return voteComment(4256934,&#39;Bury&#39;,this)">反对(0)</a></div>
+			</div>
+		</div>
+	<div id="comments_pager_bottom"></div></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-工控&#39;)">【推荐】超50万C++/C#源码: 大型实时仿真组态图形源码</a><br><a href="https://www.grapecity.com.cn/developer/spreadjs?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS&amp;utm_campaign=community" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-SpreadJS&#39;)">【前端】SpreadJS表格控件，可嵌入系统开发的在线Excel</a><br><a href="https://ke.qq.com/adActivity.html?name=xiangxueketang2" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-享学&#39;)">【培训】阿里P8面试官：什么样的人能进阿里</a><br><a href="https://q.cnblogs.com/" target="_blank" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Link&#39;, &#39;click&#39;, &#39;T2-博问&#39;)">【推荐】程序员问答平台，解决您开发中遇到的技术难题</a><br></div>
+<div id="opt_under_post"></div>
+<script async="async" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/gpt.js.下载"></script>
+<script>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+</script>
+<script>
+  googletag.cmd.push(function() {
+        googletag.defineSlot('/1090369/C1', [300, 250], 'div-gpt-ad-1546353474406-0').addService(googletag.pubads());
+        googletag.defineSlot('/1090369/C2', [468, 60], 'div-gpt-ad-1539008685004-0').addService(googletag.pubads());
+        googletag.pubads().enableSingleRequest();
+        googletag.enableServices();
+  });
+</script>
+<div id="cnblogs_c1" class="c_ad_block">
+    <div id="div-gpt-ad-1546353474406-0" style="height:250px; width:300px;" data-google-query-id="CJbmnv7h8OICFQWYlgoddjEF3w"><div id="google_ads_iframe_/1090369/C1_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C1_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C1_0" width="300" height="250" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="1" data-load-complete="true" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/saved_resource.html"></iframe></div></div>
+</div>
+<div id="under_post_news"><div class="recomm-block"><b>相关博文：</b><br>·  <a href="https://www.cnblogs.com/wlsblog/p/7908661.html" target="_blank" onclick="clickRecomItmem(7908661)">Spring boot——logback 基础使用篇（一）</a><br>·  <a href="https://www.cnblogs.com/bigben0123/p/7895851.html" target="_blank" onclick="clickRecomItmem(7895851)">Spring boot——logback 基础使用篇（一）</a><br>·  <a href="https://www.cnblogs.com/eyesfree/p/10247841.html" target="_blank" onclick="clickRecomItmem(10247841)">Springboot——logback基础使用篇（一）</a><br>·  <a href="https://www.cnblogs.com/yuanermen/archive/2012/02/13/2348942.html" target="_blank" onclick="clickRecomItmem(2348942)">日志组件logback的介绍及配置使用方法(一)</a><br>·  <a href="https://www.cnblogs.com/yaoyiyao/p/7248490.html" target="_blank" onclick="clickRecomItmem(7248490)">转：日志组件logback的介绍及配置使用方法</a><br></div></div>
+<div id="cnblogs_c2" class="c_ad_block">
+    <div id="div-gpt-ad-1539008685004-0" style="height:60px; width:468px;" data-google-query-id="CJ6aoP7h8OICFQWYlgoddjEF3w"><div id="google_ads_iframe_/1090369/C2_0__container__" style="border: 0pt none;"><iframe id="google_ads_iframe_/1090369/C2_0" title="3rd party ad content" name="google_ads_iframe_/1090369/C2_0" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" frameborder="0" style="border: 0px; vertical-align: bottom;" data-google-container-id="2" data-load-complete="true" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/saved_resource(1).html"></iframe></div></div>
+</div>
+<div id="under_post_kb"><div class="itnews c_ad_block"><b>最新新闻</b>：<br> ·  <a href="https://news.cnblogs.com/n/626980/" target="_blank">激光摧毁血液中的癌细胞</a><br> ·  <a href="https://news.cnblogs.com/n/626979/" target="_blank">地球历史的24个转折点</a><br> ·  <a href="https://news.cnblogs.com/n/626978/" target="_blank">2249万元！UCloud 中标中移信息技术“异地多活”云平台试点工程</a><br> ·  <a href="https://news.cnblogs.com/n/626977/" target="_blank">4G的小程序与5G的Chromium OS？</a><br> ·  <a href="https://news.cnblogs.com/n/626976/" target="_blank">美国航空机上 WiFi 全面升级为卫星网络，空中上网的体验更好了</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"><b>历史上的今天:</b><br>2015-08-24 <a href="https://www.cnblogs.com/lixuwu/p/5676181.html">(转)Java中的static关键字解析</a><br>2015-08-24 <a href="https://www.cnblogs.com/lixuwu/p/5676182.html">(转)字符串循环移位</a><br></div>
+<script type="text/javascript">
+ if(enablePostBottom()) {
+    codeHighlight();
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverT2();
+    deliverC1();
+    deliverC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);  
+}
+</script>
+</div>
+
+    
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div align="center">访问统计：</div>
+<div align="center"><a href="http://www.amazingcounters.com/"><img border="0" src="./Spring boot——logback 基础使用篇（一） - CS408 - 博客园_files/counter.php" alt="AmazingCounters.com"></a></div><div id="profile_block">昵称：<a href="https://home.cnblogs.com/u/lixuwu/">CS408</a><br>园龄：<a href="https://home.cnblogs.com/u/lixuwu/" title="入园时间：2015-05-09">4年1个月</a><br>粉丝：<a href="https://home.cnblogs.com/u/lixuwu/followers/">72</a><br>关注：<a href="https://home.cnblogs.com/u/lixuwu/followees/">3</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;b1051354-e5f5-e411-b908-9dcfd8948a71&#39;)">+加关注</a></div><script>getFollowStatus('b1051354-e5f5-e411-b908-9dcfd8948a71')</script></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/05/01&#39;);return false;">&lt;</a></td><td align="center">2019年6月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2019/07/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">26</td><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td class="CalWeekendDay" align="center">1</td></tr><tr><td class="CalWeekendDay" align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center"><a href="https://www.cnblogs.com/lixuwu/archive/2019/06/05.html"><u>5</u></a></td><td align="center"><a href="https://www.cnblogs.com/lixuwu/archive/2019/06/06.html"><u>6</u></a></td><td align="center">7</td><td class="CalWeekendDay" align="center">8</td></tr><tr><td class="CalWeekendDay" align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td class="CalWeekendDay" align="center">15</td></tr><tr><td class="CalWeekendDay" align="center">16</td><td class="CalTodayDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td class="CalWeekendDay" align="center">22</td></tr><tr><td class="CalWeekendDay" align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td class="CalWeekendDay" align="center">29</td></tr><tr><td class="CalWeekendDay" align="center">30</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/lixuwu/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="https://www.cnblogs.com/lixuwu/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="https://www.cnblogs.com/lixuwu/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="https://www.cnblogs.com/lixuwu/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="https://www.cnblogs.com/lixuwu/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block">
+<div class="catListTag">
+<h3 class="catListTitle">我的标签</h3>
+<ul>
+<li><a href="https://www.cnblogs.com/lixuwu/tag/Maven%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">Maven学习总结</a>(16)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/java%E5%9F%BA%E7%A1%80/">java基础</a>(15)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/eclipse/">eclipse</a>(8)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/%E5%B7%A5%E5%85%B7/">工具</a>(8)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/%E9%9D%A2%E8%AF%95%E7%AC%94%E8%AF%95/">面试笔试</a>(7)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/%E7%90%86%E8%A7%A3JVM/">理解JVM</a>(4)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/%E7%AE%80%E5%8E%86/">简历</a>(3)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/spring/">spring</a>(3)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/git/">git</a>(3)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/">java多线程</a>(2)</li><li><a href="https://www.cnblogs.com/lixuwu/tag/">更多</a></li>
+</ul>
+</div></div><div id="sidebar_categories">
+<div id="sidebar_postcategory" class="catListPostCategory sidebar-block">
+<h3 class="catListTitle">随笔分类<span style="font-size:11px;font-weight:normal">(499)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="https://www.cnblogs.com/lixuwu/category/1264398.html">C++(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="https://www.cnblogs.com/lixuwu/category/854080.html">Computer(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="https://www.cnblogs.com/lixuwu/category/853853.html">Css(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="https://www.cnblogs.com/lixuwu/category/856384.html">Development tools(84)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="https://www.cnblogs.com/lixuwu/category/853850.html">Java(75)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="https://www.cnblogs.com/lixuwu/category/853858.html">Java多线程(22)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="https://www.cnblogs.com/lixuwu/category/853851.html">Jquery(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="https://www.cnblogs.com/lixuwu/category/853847.html">Json(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="https://www.cnblogs.com/lixuwu/category/862507.html">Linux(38)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="https://www.cnblogs.com/lixuwu/category/892095.html">Linux日练(14)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="https://www.cnblogs.com/lixuwu/category/1041142.html">log4j(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="https://www.cnblogs.com/lixuwu/category/909685.html">Mq(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="https://www.cnblogs.com/lixuwu/category/853839.html">MyBatis(16)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="https://www.cnblogs.com/lixuwu/category/853855.html">Redis-Memcached(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="https://www.cnblogs.com/lixuwu/category/1179712.html">RPC(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="https://www.cnblogs.com/lixuwu/category/853849.html">Spring(31)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="https://www.cnblogs.com/lixuwu/category/1174187.html">tomcat(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="https://www.cnblogs.com/lixuwu/category/878781.html">Xml(5)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="https://www.cnblogs.com/lixuwu/category/853852.html">成长阅历(9)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="https://www.cnblogs.com/lixuwu/category/894046.html">单元测试(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="https://www.cnblogs.com/lixuwu/category/1429504.html">分布式(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_21" href="https://www.cnblogs.com/lixuwu/category/853862.html">工作总结(27)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_22" href="https://www.cnblogs.com/lixuwu/category/853856.html">面试算法(28)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_23" href="https://www.cnblogs.com/lixuwu/category/853859.html">面试题(49)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_24" href="https://www.cnblogs.com/lixuwu/category/907361.html">设计模式(6)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_25" href="https://www.cnblogs.com/lixuwu/category/853857.html">数据库(31)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_26" href="https://www.cnblogs.com/lixuwu/category/853864.html">网络知识(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_27" href="https://www.cnblogs.com/lixuwu/category/853861.html">左程云老师算法解析(1)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+<h3 class="catListTitle">随笔档案<span style="font-size:11px;font-weight:normal">(479)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="https://www.cnblogs.com/lixuwu/archive/2019/06.html">2019年6月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="https://www.cnblogs.com/lixuwu/archive/2019/05.html">2019年5月 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="https://www.cnblogs.com/lixuwu/archive/2019/04.html">2019年4月 (39)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="https://www.cnblogs.com/lixuwu/archive/2019/03.html">2019年3月 (17)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="https://www.cnblogs.com/lixuwu/archive/2019/01.html">2019年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="https://www.cnblogs.com/lixuwu/archive/2018/12.html">2018年12月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="https://www.cnblogs.com/lixuwu/archive/2018/11.html">2018年11月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="https://www.cnblogs.com/lixuwu/archive/2018/10.html">2018年10月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="https://www.cnblogs.com/lixuwu/archive/2018/09.html">2018年9月 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="https://www.cnblogs.com/lixuwu/archive/2018/08.html">2018年8月 (14)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="https://www.cnblogs.com/lixuwu/archive/2018/07.html">2018年7月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="https://www.cnblogs.com/lixuwu/archive/2018/04.html">2018年4月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="https://www.cnblogs.com/lixuwu/archive/2018/03.html">2018年3月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="https://www.cnblogs.com/lixuwu/archive/2018/02.html">2018年2月 (9)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="https://www.cnblogs.com/lixuwu/archive/2018/01.html">2018年1月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="https://www.cnblogs.com/lixuwu/archive/2017/12.html">2017年12月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="https://www.cnblogs.com/lixuwu/archive/2017/11.html">2017年11月 (17)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="https://www.cnblogs.com/lixuwu/archive/2017/10.html">2017年10月 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="https://www.cnblogs.com/lixuwu/archive/2017/09.html">2017年9月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_19" href="https://www.cnblogs.com/lixuwu/archive/2017/08.html">2017年8月 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_20" href="https://www.cnblogs.com/lixuwu/archive/2017/07.html">2017年7月 (18)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_21" href="https://www.cnblogs.com/lixuwu/archive/2017/06.html">2017年6月 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_22" href="https://www.cnblogs.com/lixuwu/archive/2017/05.html">2017年5月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_23" href="https://www.cnblogs.com/lixuwu/archive/2017/04.html">2017年4月 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_24" href="https://www.cnblogs.com/lixuwu/archive/2017/03.html">2017年3月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_25" href="https://www.cnblogs.com/lixuwu/archive/2017/02.html">2017年2月 (16)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_26" href="https://www.cnblogs.com/lixuwu/archive/2017/01.html">2017年1月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_27" href="https://www.cnblogs.com/lixuwu/archive/2016/12.html">2016年12月 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_28" href="https://www.cnblogs.com/lixuwu/archive/2016/11.html">2016年11月 (31)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_29" href="https://www.cnblogs.com/lixuwu/archive/2016/10.html">2016年10月 (15)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_30" href="https://www.cnblogs.com/lixuwu/archive/2016/09.html">2016年9月 (15)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_31" href="https://www.cnblogs.com/lixuwu/archive/2016/08.html">2016年8月 (20)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_32" href="https://www.cnblogs.com/lixuwu/archive/2016/07.html">2016年7月 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_33" href="https://www.cnblogs.com/lixuwu/archive/2016/06.html">2016年6月 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_34" href="https://www.cnblogs.com/lixuwu/archive/2016/05.html">2016年5月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_35" href="https://www.cnblogs.com/lixuwu/archive/2016/03.html">2016年3月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_36" href="https://www.cnblogs.com/lixuwu/archive/2016/02.html">2016年2月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_37" href="https://www.cnblogs.com/lixuwu/archive/2016/01.html">2016年1月 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_38" href="https://www.cnblogs.com/lixuwu/archive/2015/11.html">2015年11月 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_39" href="https://www.cnblogs.com/lixuwu/archive/2015/10.html">2015年10月 (38)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_40" href="https://www.cnblogs.com/lixuwu/archive/2015/09.html">2015年9月 (32)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_41" href="https://www.cnblogs.com/lixuwu/archive/2015/08.html">2015年8月 (26)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_42" href="https://www.cnblogs.com/lixuwu/archive/2015/07.html">2015年7月 (13)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_43" href="https://www.cnblogs.com/lixuwu/archive/2015/05.html">2015年5月 (10)</a> </li>
+
+</ul>
+
+</div>
+
+<div id="sidebar_articlecategory" class="catListArticleCategory sidebar-block">
+<h3 class="catListTitle">文章分类</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_2_Link_0" href="https://www.cnblogs.com/lixuwu/category/1031100.html">Work-center</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#4256934">1. Re:Spring boot——logback 基础使用篇（一）</a></li>
+        <li class="recent_comment_body">1.这里若不配置具体的包的日志级别，日志文件信息将为空<br><br>这个应该错了，不配置具体包的日志级别日志文件也不会为空。</li>
+        <li class="recent_comment_author">--唐永双</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/5944062.html#4255162">2. Re:（转）Linux下查看文件和文件夹大小 删除日志</a></li>
+        <li class="recent_comment_body">已收藏</li>
+        <li class="recent_comment_author">--4_4</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/6697537.html#4218238">3. Re:(转)@ContextConfiguration注解说明</a></li>
+        <li class="recent_comment_body">学习到了！</li>
+        <li class="recent_comment_author">--一杯热咖啡AAA</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/6692371.html#4190247">4. Re:（转）eclipse导入Gradle项目</a></li>
+        <li class="recent_comment_body">-----------------</li>
+        <li class="recent_comment_author">--规格严格-功夫到家</li>
+        <li class="recent_comment_title"><a href="https://www.cnblogs.com/lixuwu/p/7069826.html#4179070">5. Re:（转）java之runnable jar与普通jar</a></li>
+        <li class="recent_comment_body">6666</li>
+        <li class="recent_comment_author">--规格严格-功夫到家</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="https://www.cnblogs.com/lixuwu/p/5944062.html">1. （转）Linux下查看文件和文件夹大小 删除日志(269242)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html">2. Spring boot——logback 基础使用篇（一）(115559)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5855031.html">3. （转）如何在maven的pom.xml中添加本地jar包(51246)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5916585.html">4. （转）mybatis常用jdbcType数据类型(39664)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/6102444.html">5. （转）centos7安装telnet服务(38300)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"><ul><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html">1. Spring boot——logback 基础使用篇（一）(15)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/6116513.html">2. Linux日志分析ELK环境搭建(2)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5944062.html">3. （转）Linux下查看文件和文件夹大小 删除日志(2)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/5855031.html">4. （转）如何在maven的pom.xml中添加本地jar包(2)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/8469037.html">5. 如何写一份优秀的java程序员简历(2)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"><ul><li><a href="https://www.cnblogs.com/lixuwu/p/5804793.html">1. Spring boot——logback 基础使用篇（一）(31)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/7979480.html">2. 多线程 ForkJoinPool(7)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/8469037.html">3. 如何写一份优秀的java程序员简历(5)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/6692371.html">4. （转）eclipse导入Gradle项目(5)</a></li><li><a href="https://www.cnblogs.com/lixuwu/p/6797077.html">5. (转) Eclipse Maven 编译错误 Dynamic Web Module 3.1 requires Java 1.7 or newer 解决方案(3)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2019 CS408
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+<!--PageEndHtml Block Begin-->
+<script language="javascript" type="text/javascript">
+//生成目录索引列表
+function GenerateContentList()
+{
+    var jquery_h3_list = $('#cnblogs_post_body h1');//如果你的章节标题不是h3,只需要将这里的h3换掉即可
+    if(jquery_h3_list.length>0)
+    {
+        var content = '<a name="_labelTop"></a>';
+        content    += '<div id="navCategory">';
+        content    += '<p style="font-size:18px"><b>阅读目录</b></p>';
+        content    += '<ul>';
+        for(var i =0;i<jquery_h3_list.length;i++)
+        {
+            var go_to_top = '<div style="text-align: right"><a href="#_labelTop">回到顶部</a><a name="_label' + i + '"></a></div>';
+            $(jquery_h3_list[i]).before(go_to_top);
+            var li_content = '<li><a href="#_label' + i + '">' + $(jquery_h3_list[i]).text() + '</a></li>';
+            content += li_content;
+        }
+        content    += '</ul>';
+        content    += '</div>';
+        if($('#cnblogs_post_body').length != 0 )
+        {
+            $($('#cnblogs_post_body')[0]).prepend(content);
+        }
+    }    
+}
+GenerateContentList();
+</script>
+<!--PageEndHtml Block End-->
+
+
+<div id="toTop" style="zoom:0;"></div><div id="sideToolbar" style="display: block;"><div class="sideCatalogBg" id="sideCatalog"><div id="sideCatalog-sidebar"><div class="sideCatalog-sidebar-top"></div><div class="sideCatalog-sidebar-bottom"></div></div><div id="sideCatalog-catalog"><ul class="nav" style="width:300px;zoom:1"><li class="active"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-0-0-0" title="1 简单日志配置">1 简单日志配置</a><span class="sideCatalog-dot"></span></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-1-0-0" title="1.1 配置控制台日志的debug级别">1.1 配置控制台日志的debug级别</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-1-1-0" title="1.2 在生产环境环境下，你可以通过命令行进行配置日志的debug级别">1.2 在生产环境环境下，你可以通过命令行进行配置日志的de...</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-1-2-0" title="1.3 配置logging.level.*来具体输出哪些包的日志级别">1.3 配置logging.level.*来具体输出哪些包的...</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-1-3-0" title="1.4 将日志输出到文件中">1.4 将日志输出到文件中</a></li><li class=""><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-1-4-0" title="2 logback的介绍及配置">2 logback的介绍及配置</a><span class="sideCatalog-dot"></span></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-2-0-0" title="2.1 logback的介绍">2.1 logback的介绍</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-2-1-0" title="2.2 logback取代 log4j的理由：">2.2 logback取代 log4j的理由：</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-2-2-0" title="2.3 Logback的配置介绍">2.3&nbsp;Logback的配置介绍</a></li><li class=""><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-2-3-0" title="3 logback的使用">3 logback的使用</a><span class="sideCatalog-dot"></span></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-3-0-0" title="3.1 Logback的默认配置">3.1 Logback的默认配置</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-3-1-0" title="3.2 在程序用引用Logback">3.2 在程序用引用Logback</a></li><li class=""><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-3-2-0" title="4 sts（spring tool suite）配置彩色日志">4 sts（spring tool suite）配置...</a><span class="sideCatalog-dot"></span></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-4-0-0" title="4.1 原理">4.1 原理</a></li><li class="h2Offset"><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-4-1-0" title="4.2 代码设置">4.2 代码设置</a></li><li class=""><a href="https://www.cnblogs.com/lixuwu/p/5804793.html#autoid-4-2-0" title="5 logback.xml配置示例">5 logback.xml配置示例</a><span class="sideCatalog-dot"></span></li></ul></div></div><a href="javascript:void(0);" id="sideCatalogBtn" class="sideCatalogBtnDisable"></a></div></body></html>
